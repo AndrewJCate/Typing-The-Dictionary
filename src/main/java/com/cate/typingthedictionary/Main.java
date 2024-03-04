@@ -24,8 +24,8 @@ public class Main extends Application {
 
         stg = stage;
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view.fxml"));
-        Scene scene = new Scene(FXMLLoader.load(getClass().getResource("view.fxml")));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("summary.fxml"));
+        Scene scene = new Scene(FXMLLoader.load(getClass().getResource("summary.fxml")));
 
         stage.setScene(scene);
         stage.setResizable(false);
@@ -38,9 +38,23 @@ public class Main extends Application {
 //
 //        Map<String, String> dictionary = loader.getMapDictionary();
 //
+//        int longest = 0;
+//        String longestWord = "";
+//        String longestDef = "";
+//
 //        for (Map.Entry<String, String> entry : dictionary.entrySet()) {
-//            System.out.println(entry.getKey() + " " + entry.getValue());
+//
+//            int len = entry.getKey().length() + entry.getValue().length();
+//
+//            if (len > longest) {
+//                longest = len;
+//                longestWord = entry.getKey();
+//                longestDef = entry.getValue();
+//            }
+//
 //        }
+//
+//        System.out.println("Longest = " + longest + ": " + longestWord + " " + longestDef);
     }
 
     public void changeScene(String fxml) throws IOException {

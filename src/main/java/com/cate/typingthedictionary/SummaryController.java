@@ -10,9 +10,11 @@ import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class SummaryController implements Initializable {
 
-    private final String USER_DATA_FILE = "src/user_data.txt";
+    private final String USER_DATA_FILE = "src/data/user_data.txt";
+    private final String NEW_USER_VIEW = "new_user.fxml";
+    private final String GAME_VIEW = "game.fxml";
 
     @FXML
     private Text totalTypedWords;
@@ -34,9 +36,15 @@ public class Controller implements Initializable {
 
             String data = reader.readLine();
 
-            username.setText("Statistics for " + data);
+            if (data == null) {
+                username.setText("Statistics for user:");
+            }
+            else {
+                username.setText("Statistics for " + data + ":");
+            }
 
-            System.out.println(data);
+            // TODO: Display statistics data
+
         }
         catch (FileNotFoundException e) {
 
@@ -62,11 +70,11 @@ public class Controller implements Initializable {
         if (file.length() == 0) {
 
             try {
-                main.changeScene("popup.fxml");
+                main.changeScene(NEW_USER_VIEW);
             }
             catch (IOException e) {
 
-                System.out.println("File \"popup.fxml\" not found.");
+                System.out.println("File " + NEW_USER_VIEW + " not found.");
 
                 e.printStackTrace();
             }
@@ -74,11 +82,11 @@ public class Controller implements Initializable {
         else {
 
             try {
-                main.changeScene("game.fxml");
+                main.changeScene(GAME_VIEW);
             }
             catch (IOException e) {
 
-                System.out.println("File \"game.fxml\" not found.");
+                System.out.println("File " + GAME_VIEW + " not found.");
 
                 e.printStackTrace();
             }
