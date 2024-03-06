@@ -6,14 +6,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #40464a;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cate.typingthedictionary.NewUserController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #F2F2F2;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cate.typingthedictionary.Controllers.NewUserController">
    <children>
-      <Text fill="#cfcfcf" layoutX="140.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" text="It looks like this might be your first time playing." wrappingWidth="516.8796653747559">
+      <Text styleClass="text-class" layoutX="140.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" text="It looks like this might be your first time playing." wrappingWidth="516.8796653747559">
          <font>
             <Font size="24.0" />
          </font>
       </Text>
-      <Text fill="#cfcfcf" layoutX="209.0" layoutY="286.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter your name below to continue.">
+      <Text styleClass="text-class" layoutX="209.0" layoutY="286.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter your name below to continue.">
          <font>
             <Font size="24.0" />
          </font>
@@ -23,10 +23,6 @@
             <Font size="14.0" />
          </font>
       </TextField>
-      <Button id="submit_username_button" fx:id="submit_username_button" layoutX="501.0" layoutY="324.0" mnemonicParsing="false" onAction="#submit" style="-fx-background-color: #a98649;" text="Submit" textFill="WHITE">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
+      <Button id="submit_username_button" fx:id="submit_username_button" layoutX="501.0" layoutY="324.0" mnemonicParsing="false" onAction="#submit" text="Submit"></Button>
    </children>
 </AnchorPane>

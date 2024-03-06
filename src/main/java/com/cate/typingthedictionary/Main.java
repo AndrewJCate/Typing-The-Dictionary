@@ -25,7 +25,10 @@ public class Main extends Application {
         stg = stage;
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("summary.fxml"));
+
         Scene scene = new Scene(FXMLLoader.load(getClass().getResource("summary.fxml")));
+
+        scene.getStylesheets().add(getClass().getResource("css/styles.css").toExternalForm());
 
         stage.setScene(scene);
         stage.setResizable(false);

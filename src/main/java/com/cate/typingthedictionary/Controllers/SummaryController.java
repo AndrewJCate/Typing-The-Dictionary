@@ -1,5 +1,7 @@
-package com.cate.typingthedictionary;
+package com.cate.typingthedictionary.Controllers;
 
+import com.cate.typingthedictionary.Main;
+import com.cate.typingthedictionary.constants.Constants;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,10 +13,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class SummaryController implements Initializable {
-
-    private final String USER_DATA_FILE = "src/data/user_data.txt";
-    private final String NEW_USER_VIEW = "new_user.fxml";
-    private final String GAME_VIEW = "game.fxml";
 
     @FXML
     private Text totalTypedWords;
@@ -32,7 +30,7 @@ public class SummaryController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         // Load user data file
-        try (BufferedReader reader = new BufferedReader(new FileReader(USER_DATA_FILE))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(Constants.USER_DATA_FILE))) {
 
             String data = reader.readLine();
 
@@ -48,13 +46,13 @@ public class SummaryController implements Initializable {
         }
         catch (FileNotFoundException e) {
 
-            System.out.println("File " + USER_DATA_FILE + " not found.");
+            System.out.println("File " + Constants.USER_DATA_FILE + " not found.");
 
             e.printStackTrace();
         }
         catch (IOException e) {
 
-            System.out.println("Unable to access file " + USER_DATA_FILE + ".");
+            System.out.println("Unable to access file " + Constants.USER_DATA_FILE + ".");
 
             e.printStackTrace();
         }
@@ -65,16 +63,16 @@ public class SummaryController implements Initializable {
 
         Main main = new Main();
 
-        File file = new File(USER_DATA_FILE);
+        File file = new File(Constants.USER_DATA_FILE);
 
         if (file.length() == 0) {
 
             try {
-                main.changeScene(NEW_USER_VIEW);
+                main.changeScene(Constants.NEW_USER_VIEW);
             }
             catch (IOException e) {
 
-                System.out.println("File " + NEW_USER_VIEW + " not found.");
+                System.out.println("File " + Constants.NEW_USER_VIEW + " not found.");
 
                 e.printStackTrace();
             }
@@ -82,15 +80,23 @@ public class SummaryController implements Initializable {
         else {
 
             try {
-                main.changeScene(GAME_VIEW);
+                main.changeScene(Constants.GAME_VIEW);
             }
             catch (IOException e) {
 
-                System.out.println("File " + GAME_VIEW + " not found.");
+                System.out.println("File " + Constants.GAME_VIEW + " not found.");
 
                 e.printStackTrace();
             }
 
         }
+    }
+
+    public void onResetClicked(ActionEvent ae) {
+
+        // TODO
+
+        System.out.println("Reset button clicked."); // TODO: DELETE
+
     }
 }
