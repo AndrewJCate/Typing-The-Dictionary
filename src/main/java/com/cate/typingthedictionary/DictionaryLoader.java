@@ -1,71 +1,57 @@
 package com.cate.typingthedictionary;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Map;
+
+// Load dictionary from file
+//
 
 public class DictionaryLoader {
 
-    private final String fileName;
-    private final JSONObject jsonDictionary;
+    // Attempts to retrieve the JSON dictionary from the provided file.
+    // Returns Map with String key as the word and List<String> value as the word's definitions.
+    // Returns empty HashMap if no JSON data is found.
+    public static Dictionary loadDictionaryFromJson(String fileName) {
 
-    public DictionaryLoader(String fileName) {
-        this.fileName = fileName;
-        this.jsonDictionary = this.loadJSONDictionary();
-    }
+        Dictionary dictionary = new Dictionary();
 
-    // Returns raw JSON file
-    public JSONObject getJSONDictionary() {
-        return this.jsonDictionary;
-    }
+        try (FileReader reader = new FileReader(fileName)) {
 
-    // Converts JSONObject to Map<String, String>
-    public Map<String, String> getMapDictionary() {
+            Type mapType = new TypeToken<Map<String, String>>() {}.getType();
 
-        Map<String, String> mapDictionary = new HashMap<>();
+            Map<String, String> rawDictionary = new Gson().fromJson(reader, mapType);
 
-        for (Object key : this.jsonDictionary.keySet()) {
-            mapDictionary.put(key.toString(), this.jsonDictionary.get(key).toString());
+            for (String word : rawDictionary.keySet()) {
+
+                Type listType = new TypeToken<List<String>>() {}.getType();
+
+                List<String> definitions = new Gson().fromJson(rawDictionary.get(word), listType);
+
+                dictionary.addEntry(word, definitions);
+            }
         }
-
-        return mapDictionary;
-    }
-
-    // Attempts to retrieve the JSON dictionary from the provided file. Returns a JSONObject if successful. Returns null if no JSON data is found.
-    private JSONObject loadJSONDictionary() {
-
-        JSONObject jsonDictionary = null;
-        JSONParser parser = new JSONParser();
-
-        try (FileReader reader = new FileReader(this.fileName)) {
-
-            jsonDictionary = (JSONObject) parser.parse(reader);
-
-        } catch (FileNotFoundException e) {
+        catch (FileNotFoundException e) {
 
             System.out.println("File not found.");
 
             e.printStackTrace();
-
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
 
             System.out.println("Something went wrong when reading the file.");
 
             e.printStackTrace();
-
-        } catch (ParseException e) {
-
-            System.out.println("The dictionary file is not in valid JSON format. The file should contain one object with key (word) / value (definition) pairs.");
-
-            e.printStackTrace();
         }
 
-        return jsonDictionary;
+        return dictionary;
+
     }
+
 }
