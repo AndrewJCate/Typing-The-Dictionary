@@ -4,13 +4,25 @@ import com.cate.typingthedictionary.Main;
 import com.cate.typingthedictionary.constants.Constants;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
 
 public class GameController {
+
+    @FXML
+    private Button infoButton;
+
+    @FXML
+    private Button skipButton;
+
+    @FXML
+    private Button backButton;
 
     @FXML
     private Text sessionWordsTyped;
@@ -26,6 +38,12 @@ public class GameController {
 
     @FXML
     private TextArea wordsInput;
+
+    @FXML
+    private ImageView correctImage;
+
+    @FXML
+    private ImageView wrongImage;
 
     public void onBackClicked(ActionEvent ae) {
 
@@ -65,18 +83,16 @@ public class GameController {
 
         System.out.println("Skip button clicked."); // TODO: DELETE
 
-        this.skipWord(ae);
-
     }
 
-    public void skipWord(ActionEvent ae) {
+    public void skipWord(KeyEvent ke) {
 
         // TODO
 
         System.out.println("Skip word");    // TODO: DELETE
     }
 
-    public void startGame(ActionEvent ae) {
+    public void startGame(KeyEvent ke) {
 
         // TODO
 
