@@ -1,16 +1,18 @@
 package com.cate.typingthedictionary.Controllers;
 
 import com.cate.typingthedictionary.Main;
+import com.cate.typingthedictionary.PlayerData;
+import com.cate.typingthedictionary.PlayerDataWriter;
 import com.cate.typingthedictionary.constants.Constants;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class NewUserController {
+
+    private final PlayerData PLAYER_DATA = PlayerData.getInstance();
 
     @FXML
     private TextField username_input;
@@ -24,30 +26,21 @@ public class NewUserController {
 
         String username = this.username_input.getText();
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(Constants.USER_DATA_FILE))) {
+        PLAYER_DATA.setUserName(username);
 
-            bw.write(username);
+        PlayerDataWriter dataWriter = new PlayerDataWriter();
+        dataWriter.writeData(Constants.USER_DATA_FILE);
 
+        Main main = new Main();
+
+        try {
+            main.changeScene(Constants.SUMMARY_VIEW);
         }
         catch (IOException e) {
 
-            System.out.println("File " + Constants.USER_DATA_FILE + " could not be created or modified.");
+            System.out.println("File " + Constants.SUMMARY_VIEW + " not found.");
 
             e.printStackTrace();
-        }
-        finally {
-
-            Main main = new Main();
-
-            try {
-                main.changeScene(Constants.SUMMARY_VIEW);
-            }
-            catch (IOException e) {
-
-                System.out.println("File " + Constants.SUMMARY_VIEW + " not found.");
-
-                e.printStackTrace();
-            }
         }
 
     }

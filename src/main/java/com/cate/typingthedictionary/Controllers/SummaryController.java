@@ -1,6 +1,9 @@
 package com.cate.typingthedictionary.Controllers;
 
 import com.cate.typingthedictionary.Main;
+import com.cate.typingthedictionary.PlayerData;
+import com.cate.typingthedictionary.PlayerDataReader;
+import com.cate.typingthedictionary.PlayerDataWriter;
 import com.cate.typingthedictionary.constants.Constants;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +16,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class SummaryController implements Initializable {
+
+    private final PlayerData PLAYER_DATA = PlayerData.getInstance();
 
     @FXML
     private Text totalTypedWords;
@@ -29,37 +34,22 @@ public class SummaryController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        // Load user data file
-        try (BufferedReader reader = new BufferedReader(new FileReader(Constants.USER_DATA_FILE))) {
+        new PlayerDataReader().readData(Constants.USER_DATA_FILE);
 
-            String data = reader.readLine();
+        String userName = PLAYER_DATA.getUserName();
 
-            if (data == null) {
-                username.setText("Statistics for user:");
-            }
-            else {
-                username.setText("Statistics for " + data + ":");
-            }
-
-            // TODO: Display statistics data
-
+        if (userName == null) {
+            username.setText("Statistics:");
         }
-        catch (FileNotFoundException e) {
-
-            System.out.println("File " + Constants.USER_DATA_FILE + " not found.");
-
-            e.printStackTrace();
+        else {
+            username.setText("Statistics for " + userName + ":");
         }
-        catch (IOException e) {
 
-            System.out.println("Unable to access file " + Constants.USER_DATA_FILE + ".");
-
-            e.printStackTrace();
-        }
+        setPlayerStatisticsDisplay();
 
     }
 
-    public void beginTyping(ActionEvent event) {
+    public void onBeginTypingClicked(ActionEvent event) {
 
         Main main = new Main();
 
@@ -94,9 +84,24 @@ public class SummaryController implements Initializable {
 
     public void onResetClicked(ActionEvent ae) {
 
-        // TODO
+        // Set PLAYER_DATA values to 0
+        PLAYER_DATA.setGlobalTotalWordsTyped(0);
+        PLAYER_DATA.setGlobalWPM(0);
+        PLAYER_DATA.setGlobalAccuracy(0);
 
-        System.out.println("Reset button clicked."); // TODO: DELETE
+        // Save new values to file
+        new PlayerDataWriter().writeData(Constants.USER_DATA_FILE);
+
+        // Set display values
+        setPlayerStatisticsDisplay();
+
+    }
+
+    private void setPlayerStatisticsDisplay() {
+
+        totalTypedWords.setText(Integer.toString(PLAYER_DATA.getGlobalTotalWordsTyped()));
+        avgWPM.setText(Integer.toString(PLAYER_DATA.getGlobalWPM()));
+        accuracy.setText(Integer.toString(PLAYER_DATA.getGlobalAccuracy()));
 
     }
 }
