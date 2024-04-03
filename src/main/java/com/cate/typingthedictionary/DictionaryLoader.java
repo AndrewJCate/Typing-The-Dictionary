@@ -18,7 +18,7 @@ public class DictionaryLoader {
     // Attempts to retrieve the JSON dictionary from the provided file.
     // Returns Map with String key as the word and List<String> value as the word's definitions.
     // Returns empty HashMap if no JSON data is found.
-    public static Dictionary loadDictionaryFromJson(String fileName) {
+    public static Dictionary loadDictionaryFromFile(String fileName) {
 
         Dictionary dictionary = new Dictionary();
 
