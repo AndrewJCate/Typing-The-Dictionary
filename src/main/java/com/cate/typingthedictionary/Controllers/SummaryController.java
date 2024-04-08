@@ -45,7 +45,7 @@ public class SummaryController implements Initializable {
             username.setText("Statistics for " + userName + ":");
         }
 
-        setPlayerStatisticsDisplay();
+        setGlobalStatisticsDisplay();
 
     }
 
@@ -87,21 +87,21 @@ public class SummaryController implements Initializable {
         // Set PLAYER_DATA values to 0
         PLAYER_DATA.setGlobalTotalWordsTyped(0);
         PLAYER_DATA.setGlobalWPM(0);
-        PLAYER_DATA.setGlobalAccuracy(0);
+        PLAYER_DATA.setGlobalAccuracy(100);
 
         // Save new values to file
         new PlayerDataWriter().writeData(Constants.USER_DATA_FILE);
 
         // Set display values
-        setPlayerStatisticsDisplay();
+        setGlobalStatisticsDisplay();
 
     }
 
-    private void setPlayerStatisticsDisplay() {
+    private void setGlobalStatisticsDisplay() {
 
         totalTypedWords.setText(Integer.toString(PLAYER_DATA.getGlobalTotalWordsTyped()));
         avgWPM.setText(Integer.toString(PLAYER_DATA.getGlobalWPM()));
-        accuracy.setText(Integer.toString(PLAYER_DATA.getGlobalAccuracy()));
+        accuracy.setText(PLAYER_DATA.getGlobalAccuracy() + "%");
 
     }
 }

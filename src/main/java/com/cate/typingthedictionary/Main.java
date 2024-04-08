@@ -8,12 +8,11 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class Main extends Application {
 
     private static Stage stg;
-
-    public static final String DEFAULT_DICTIONARY_FILENAME = "dictionaries/default_dictionary.json";
 
     public static void main(String[] args) {
         launch();
@@ -24,108 +23,70 @@ public class Main extends Application {
 
         stg = stage;
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("summary.fxml"));
+        Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("summary.fxml"))));
 
-        Scene scene = new Scene(FXMLLoader.load(getClass().getResource("summary.fxml")));
-
-        scene.getStylesheets().add(getClass().getResource("css/styles.css").toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("css/styles.css")).toExternalForm());
 
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("Type the Dictionary");
-        stage.getIcons().add(new Image(getClass().getResource("/images/icon.png").toString()));
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/icon.png")).toString()));
 
         stage.show();
 
-//        DictionaryLoader loader = new DictionaryLoader(DEFAULT_DICTIONARY_FILENAME);
-//
-//        Map<String, String> dictionary = loader.getMapDictionary();
-//
-//        int longest = 0;
-//        String longestWord = "";
-//        String longestDef = "";
-//
-//        for (Map.Entry<String, String> entry : dictionary.entrySet()) {
-//
-//            int len = entry.getKey().length() + entry.getValue().length();
-//
-//            if (len > longest) {
-//                longest = len;
-//                longestWord = entry.getKey();
-//                longestDef = entry.getValue();
-//            }
-//
-//        }
-//
-//        System.out.println("Longest = " + longest + ": " + longestWord + " " + longestDef);
     }
 
     public void changeScene(String fxml) throws IOException {
 
-        Parent pane = FXMLLoader.load(getClass().getResource(fxml));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxml)));
 
-        stg.getScene().setRoot(pane);
+        stg.getScene().setRoot(root);
     }
 
+    @Override
+    public void stop() throws Exception {
+
+        // TODO
+        // Save info before closing
+    }
+
+    // TODO: DELETE THIS STUFF
     /*
-     TODO NOTES
+        Dictionary dictionary = DictionaryLoader.loadDictionaryFromJson(Constants.DEFAULT_DICTIONARY_FILENAME);
 
-     INCLUDE
-        Disclaimer about content could be inappropriate
+        Map<String, List<String>> entries = dictionary.getAllEntries();
 
-     SPLITTING
+        for (String entry : entries.keySet()) {
+            System.out.println(entry);
 
-        Exception: months ["More than one month; the plural form of \"month\"."]
+            for (String definition : entries.get(entry)) {
+                System.out.println(definition);
+            }
 
-        String s = "[\"A period of three months.\",\"One of the three academic terms, " +
-                "each comprising one-third of an academic year.\",\"One of the three divisions of pregnancy, each " +
-                "lasting three months.\"]";
-
-        String[] definitions = s.split("\",\"");
-
-        for (String str : definitions) {
-            str = StringCleaner.removeBrackets(str);
-            str = StringCleaner.removeQuotations(str);
-            System.out.println(str);
+            System.out.println();
         }
 
-     PARSING CHALLENGES
+        AbstractMap.SimpleEntry<String, List<String>> entry = dictionary.getRandomEntry();
+        System.out.println(entry.getKey());
+        System.out.println(entry.getValue());
 
-        Source at end of definition:
-            oafs ["An elf's child; a changeling left by fairies or goblins, hence, a deformed or foolish child.
-            Source:Wiktionary"]
-            ointment ["A semisolid preparation intended for external application to the skin or mucous membranes. (source: UMLS)"]
+        int longest = 0;
+        String longestWord = "";
+        String longestDef = "";
 
-        Source at end of definition after newline:
-            regeneration ["The renewing or reuse of materials such as activated carbon, single ion exchange resins,
-            and filter beds by appropriate means to remove organics, metals, solids, etc.\\n(Source: LEE)"]
+        for (
+            Map.Entry<String, List<String>> entry : dictionary.getAllEntries()) {
 
-        No period at end of definition:
-            electric locomotive ["Locomotive that is propelled by electric motors"]
+            int len = entry.getKey().length() + entry.getValue().length();
 
-        Entry with unusual characters:
-            Bororo ["A Macro-Gê language spoken by the Bororo people in the Central Mato Grosso region of Brazil."]
+            if (len > longest) {
+                longest = len;
+                longestWord = entry.getKey();
+                longestDef = entry.getValue();
+            }
 
-        Weird entry spelling issues:
-            bedpan ["A small quite flat bowl used f ex in health care to collect urine from those confined to bed."]
+        }
 
-        Contain unicode chars:
-            it's…'s job to ["Having, as for me\/you\/him\/us\u2026, the task of"]
-            N-methylamphetamine ["An addictive psychoactive drug of formula C\u2081\u2080H\u2081\u2085N."]
-
-     CONSIDER REMOVING ENTRIES
-
-        contains("ISO")
-        contains("offensive"), contains("insult"), contains("Pejorative")
-        contains("fictional character"), contains("fictional")
-        contains("language"), contains("A language of"), contains("dialect")
-
-        Zigzag ["A small town in Oregon, USA."]
-
-        Having unique characters: ā, Ö, ó, ô, č, é, í, š
-
-        Where word is all caps: COCOMO
-
-     */
-
+        System.out.println("Longest = " + longest + ": " + longestWord + " " + longestDef);
+    */
 }
