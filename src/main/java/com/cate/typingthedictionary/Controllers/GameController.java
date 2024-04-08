@@ -1,9 +1,6 @@
 package com.cate.typingthedictionary.Controllers;
 
-import com.cate.typingthedictionary.Dictionary;
-import com.cate.typingthedictionary.DictionaryLoader;
-import com.cate.typingthedictionary.Main;
-import com.cate.typingthedictionary.Validator;
+import com.cate.typingthedictionary.*;
 import com.cate.typingthedictionary.constants.Constants;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -61,25 +58,33 @@ public class GameController implements Initializable {
     @FXML
     private ImageView wrongImage;
 
-    static final int BACK_SPACE = 8;
-    static final int ENTER = 13;
+    @FXML
+    private ImageView doubleCorrectImage;
 
-    private final Font WORD_FONT = Font.font("System", FontWeight.BOLD, FontPosture.REGULAR, 20);
+    static final int BACK_SPACE = 8;
+    static final int ENTER      = 13;
+    static final int ESCAPE     = 27;
+
+    private final Font WORD_FONT       = Font.font("System", FontWeight.BOLD,   FontPosture.REGULAR, 20);
     private final Font DEFINITION_FONT = Font.font("System", FontWeight.NORMAL, FontPosture.REGULAR, 16);
     private final Font TEXT_INPUT_FONT = Font.font("Tahoma", FontWeight.NORMAL, FontPosture.REGULAR, 16);
 
+    private final PlayerData PLAYER_DATA = PlayerData.getInstance();
+
     private AbstractMap.SimpleEntry<String, List<String>> currentEntry;
     private Dictionary dictionary;
-    private int errorCount = 0;
-    private boolean isGameRunning = false;
+    private boolean isGameRunning  = false;
+    private boolean isEntryCorrect = false;
     private Validator validator;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        this.loadDictionary();
-        this.loadNextEntry();
-        this.displayNextEntry();
+        loadDictionary();
+        loadNextEntry();
+        displayNextEntry();
+        setSessionStatsData();
+
         this.validator = new Validator();
 
         this.textInput.setFont(TEXT_INPUT_FONT);
@@ -88,40 +93,78 @@ public class GameController implements Initializable {
 
     public void handelKeyTyped(KeyEvent ke) {
 
-        // Skip word if first key pressed is backspace
+        // Handle ESCAPE
+        if (ke.getCharacter().charAt(0) == ESCAPE) { back(); }
+
+        // Handle BACKSPACE
         if (!isGameRunning) {
 
             if (ke.getCharacter().charAt(0) == BACK_SPACE) {
-                skipWord();
+
+                nextWord();
+
+                return;
             }
             else {
-                startGame(ke);
+
+                startGame();
+
                 isGameRunning = true;
             }
 
         }
-        else {
-            // handle typed content
 
-            String enteredText = textInput.getText();
+        // Handle typed content
+        String enteredText = textInput.getText();
 
-            boolean isValid = validator.entryStartsWithText(currentEntry, enteredText);
+        boolean isInputValid = validator.entryStartsWithText(currentEntry, enteredText);
 
-            if (isValid && !correctImage.isVisible()) {
-                wrongImage.setVisible(false);
-                correctImage.setVisible(true);
-            }
-            else if (!isValid && !wrongImage.isVisible()) {
-                correctImage.setVisible(false);
-                wrongImage.setVisible(true);
-            }
+        // Display correct entry icon
+        if (validator.compareInputAndEntry(enteredText, currentEntry)) {
+
+            doubleCorrectImage.setVisible(true);
+
+            skipButton.setText("Next");
+
+            isEntryCorrect = true;
+        }
+
+        // Display correct icon
+        if (isInputValid && !correctImage.isVisible()) {
+
+            wrongImage.setVisible(false);
+            correctImage.setVisible(true);
+
+        }
+        // Display incorrect icon
+        else if (!isInputValid && !wrongImage.isVisible() && !isEntryCorrect) {
+
+            correctImage.setVisible(false);
+            wrongImage.setVisible(true);
+
+            PLAYER_DATA.incrementSessionErrorCount();
+        }
+
+        // Handle ENTER to move to next word
+        if (isEntryCorrect && ke.getCharacter().charAt(0) == ENTER) {
 
             // TODO
+            // stop time
+            // measure WPM
+
+            nextWord();
         }
+
+        setSessionStatsData();
 
     }
 
-    public void onBackClicked(ActionEvent ae) {
+    public void onBackClicked(ActionEvent ae) { back(); }
+
+    private void back() {
+
+        // Stop game
+        // TODO: Save data
 
         Main main = new Main();
 
@@ -139,6 +182,8 @@ public class GameController implements Initializable {
 
     public void onInfoClicked(ActionEvent ae) {
 
+        // TODO: Save data
+
         Main main = new Main();
 
         try {
@@ -154,10 +199,10 @@ public class GameController implements Initializable {
     }
 
     public void onSkipClicked(ActionEvent ae) {
-        skipWord();
+        nextWord();
     }
 
-    public void skipWord() {
+    public void nextWord() {
 
         // TODO
         isGameRunning = false;
@@ -165,31 +210,30 @@ public class GameController implements Initializable {
         loadNextEntry();
         displayNextEntry();
         clearInput();
+        resetDisplay();
+
         textInput.requestFocus();
+
+        isEntryCorrect = false;
 
     }
 
-    public void startGame(KeyEvent ke) {
+    public void startGame() {
 
         // TODO
         // Save timestamp
 
     }
 
+    public void stopGame() {
+
+        // TODO
+        // Save timestamp
+        // calculate WPM
+    }
+
     private void clearInput() {
-        Platform.runLater(() -> { textInput.clear(); });
-    }
-
-    private void loadDictionary() {
-
-        // TODO swap back
-//        this.dictionary = DictionaryLoader.loadDictionaryFromFile(Constants.DEFAULT_DICTIONARY_FILENAME);
-
-        this.dictionary = DictionaryLoader.loadDictionaryFromFile("dictionaries/sorted_pretty_dictionary.json");
-    }
-
-    private void loadNextEntry() {
-        this.currentEntry = this.dictionary.getRandomEntry();
+        Platform.runLater(() -> textInput.clear());
     }
 
     private void displayNextEntry() {
@@ -218,6 +262,36 @@ public class GameController implements Initializable {
             }
 
         });
+
+    }
+
+    private void loadDictionary() {
+
+        // TODO swap back
+//        this.dictionary = DictionaryLoader.loadDictionaryFromFile(Constants.DEFAULT_DICTIONARY_FILENAME);
+
+        this.dictionary = DictionaryLoader.loadDictionaryFromFile("dictionaries/sorted_pretty_dictionary.json");
+    }
+
+    private void loadNextEntry() {
+        this.currentEntry = this.dictionary.getRandomEntry();
+    }
+
+    private void resetDisplay() {
+
+        wrongImage.setVisible(false);
+        correctImage.setVisible(false);
+        doubleCorrectImage.setVisible(false);
+
+        skipButton.setText("Skip");
+
+    }
+
+    private void setSessionStatsData() {
+
+        sessionWordsTyped.setText(Integer.toString(PLAYER_DATA.getSessionTotalWordsTyped()));
+        sessionWPM.setText(Integer.toString(PLAYER_DATA.getSessionWPM()));
+        sessionAccuracy.setText(PLAYER_DATA.getSessionAccuracy() + "%");
 
     }
 

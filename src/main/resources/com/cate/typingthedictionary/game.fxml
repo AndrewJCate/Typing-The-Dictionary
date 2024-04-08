@@ -95,5 +95,9 @@
         <ImageView id="wrongImage" fx:id="wrongImage" fitHeight="45.0" fitWidth="45.0" layoutX="88.0" layoutY="234.0" pickOnBounds="true" preserveRatio="true" visible="false">
             <Image url="@../../../images/wrong.png" />
         </ImageView>
+        <ImageView id="doubleCorrectImage" fx:id="doubleCorrectImage" fitHeight="45.0" fitWidth="45.0" layoutX="30.0"
+                   layoutY="234.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <Image url="@../../../images/check.png"/>
+        </ImageView>
     </Pane>
 </GridPane>
