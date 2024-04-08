@@ -53,7 +53,7 @@ public class PlayerDataReader {
 
     private int[] parseStatistics(String stasticsString) {
 
-        return Stream.of(stasticsString.split(" ")).mapToInt(Integer::parseInt).toArray();
+        return Stream.of(stasticsString.split("\\s+")).mapToInt(Integer::parseInt).toArray();
 
     }
 }
