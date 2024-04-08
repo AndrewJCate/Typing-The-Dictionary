@@ -6,81 +6,68 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #F2F2F2;"
-            xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.cate.typingthedictionary.Controllers.InstructionsController">
-   <TextFlow layoutX="140.0" layoutY="95.0" prefHeight="286.0" prefWidth="522.0">
-      <Text fill="#287d7d" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;"
-            text="Instructions:">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #F2F2F2;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cate.typingthedictionary.Controllers.InstructionsController">
+   <TextFlow layoutX="139.0" layoutY="59.0" prefHeight="286.0" prefWidth="522.0">
+      <Text fill="#287d7d" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" text="Instructions:">
          <font>
-            <Font size="18.0"/>
+            <Font size="20.0" />
          </font>
       </Text>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-class"
-            text="&#10;&#10;Type the word and definition(s) as they appear on the screen.&#10;&#10;Time starts when you begin typing and is used to track how many words you type each minute. &#10;&#10;When something is typed incorrectly, an &quot;X&quot; icon will display. &#10;When everything is correct, a check mark will display. &#10;When you have successfully typed the entire entry, a double check mark will display.&#10;&#10;&#10;"
-            wrappingWidth="508.046875">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-class" text="&#10;&#10;Type the word and definition(s) as they appear on the screen.&#10;&#10;Time starts when you begin typing and is used to track how many words you type each minute. &#10;&#10;When something is typed incorrectly, an &quot;X&quot; icon will display. &#10;When everything is correct, a check mark will display. &#10;When you have successfully typed the entire entry, a double check mark will display.&#10;&#10;&#10;" wrappingWidth="508.046875">
          <font>
-            <Font size="14.0"/>
+            <Font size="16.0" />
          </font>
       </Text>
       <Text fill="#287d7d" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" text="Controls:">
          <font>
-            <Font size="18.0"/>
+            <Font size="20.0" />
          </font>
       </Text>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-class" text="&#10;&#10;Press ">
          <font>
-            <Font size="14.0"/>
+            <Font size="16.0" />
          </font>
       </Text>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" styleClass="text-class"
-            text="Backspace">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" styleClass="text-class" text="Backspace">
          <font>
-            <Font size="14.0"/>
+            <Font size="16.0" />
          </font>
       </Text>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-class"
-            text=" at the beginning of a new word before typing anything else to skip the word.&#10;&#10;">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-class" text=" at the beginning of a new word before typing anything else to skip the word.&#10;&#10;">
          <font>
-            <Font size="14.0"/>
+            <Font size="16.0" />
          </font>
       </Text>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-class" text="Press ">
          <font>
-            <Font size="14.0"/>
+            <Font size="16.0" />
          </font>
       </Text>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" styleClass="text-class"
-            text="Enter">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" styleClass="text-class" text="Enter">
          <font>
-            <Font size="14.0"/>
+            <Font size="16.0" />
          </font>
       </Text>
-      <Text layoutX="68.0" layoutY="271.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-class"
-            text=" when all the characters have been typed correctly to stop time and move on to the next word.&#10;&#10;">
+      <Text layoutX="68.0" layoutY="271.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-class" text=" when all the characters have been typed correctly to stop time and move on to the next word.&#10;&#10;">
          <font>
-            <Font size="14.0"/>
+            <Font size="16.0" />
          </font>
       </Text>
-      <Text layoutX="10.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-class"
-            text="Press ">
+      <Text layoutX="10.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-class" text="Press ">
          <font>
-            <Font size="14.0"/>
+            <Font size="16.0" />
          </font>
       </Text>
-      <Text layoutX="46.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;"
-            styleClass="text-class" text="Escape">
+      <Text layoutX="46.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" styleClass="text-class" text="Escape">
          <font>
-            <Font size="14.0"/>
+            <Font size="16.0" />
          </font>
       </Text>
-      <Text layoutX="10.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-class"
-            text=" while typing to return to the Summary screen.&#10;">
+      <Text layoutX="10.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-class" text=" while typing to return to the Summary screen.&#10;">
          <font>
-            <Font size="14.0"/>
+            <Font size="16.0" />
          </font>
       </Text>
    </TextFlow>
-   <Button id="backButton" fx:id="backButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false"
-           onAction="#onBackClicked" text="Back"/>
+   <Button id="backButton" fx:id="backButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#onBackClicked" text="Back" />
 </AnchorPane>
