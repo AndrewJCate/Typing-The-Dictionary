@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #F2F2F2;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cate.typingthedictionary.Controllers.InstructionsController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #F2F2F2;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.cate.typingthedictionary.Controllers.InstructionsController">
    <TextFlow layoutX="139.0" layoutY="59.0" prefHeight="286.0" prefWidth="522.0">
       <Text fill="#287d7d" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" text="Instructions:">
          <font>
