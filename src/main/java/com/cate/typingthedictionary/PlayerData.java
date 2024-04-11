@@ -3,28 +3,26 @@ package com.cate.typingthedictionary;
 public class PlayerData {
 
     private static final PlayerData INSTANCE = new PlayerData();
-    private int globalAccuracy = 100;
+
+
     private int globalErrors = 0;
     private int globalTotalWordsTyped = 0;
     private int globalWPM = 0;
-    private int sessionAccuracy = 100;
+
     private int sessionErrors = 0;
-    private int sessionTotalWordsTyped = 100;
+    private int sessionTotalWordsTyped = 0;
     private int sessionWPM = 0;
+
+    private int entryErrors = 0;
+    private int entryWordsTyped = 0;
+
     private String userName = null;
 
-    private PlayerData() {}
+    private PlayerData() {
+    }
 
     public static PlayerData getInstance() {
         return INSTANCE;
-    }
-
-    public int getGlobalAccuracy() {
-        return globalAccuracy;
-    }
-
-    public void setGlobalAccuracy(int globalAccuracy) {
-        this.globalAccuracy = globalAccuracy;
     }
 
     public int getGlobalErrors() {
@@ -33,14 +31,6 @@ public class PlayerData {
 
     public void setGlobalErrors(int globalErrors) {
         this.globalErrors = globalErrors;
-    }
-
-    public int getSessionErrors() {
-        return sessionErrors;
-    }
-
-    public void setSessionErrors(int sessionErrors) {
-        this.sessionErrors = sessionErrors;
     }
 
     public int getGlobalTotalWordsTyped() {
@@ -59,6 +49,14 @@ public class PlayerData {
         this.globalWPM = globalWPM;
     }
 
+    public int getSessionErrors() {
+        return sessionErrors;
+    }
+
+    public void setSessionErrors(int sessionErrors) {
+        this.sessionErrors = sessionErrors;
+    }
+
     public int getSessionTotalWordsTyped() {
         return sessionTotalWordsTyped;
     }
@@ -75,18 +73,20 @@ public class PlayerData {
         this.sessionWPM = sessionWPM;
     }
 
-    public int getSessionAccuracy() {
-        return sessionAccuracy;
+    public int getEntryErrors() {
+        return entryErrors;
     }
 
-    public void setSessionAccuracy(int sessionAccuracy) {
-        this.sessionAccuracy = sessionAccuracy;
+    public void setEntryErrors(int entryErrors) {
+        this.entryErrors = entryErrors;
     }
 
-    public int updateSessionAccuracy() {
+    public int getEntryWordsTyped() {
+        return entryWordsTyped;
+    }
 
-        return sessionAccuracy = calculateAccuracy(sessionErrors, sessionTotalWordsTyped);
-
+    public void setEntryWordsTyped(int entryWordsTyped) {
+        this.entryWordsTyped = entryWordsTyped;
     }
 
     public String getUserName() {
@@ -97,30 +97,34 @@ public class PlayerData {
         this.userName = userName;
     }
 
-    public void addSessionDataToGlobalData() {
-
-        globalTotalWordsTyped += sessionTotalWordsTyped;
-        globalWPM += sessionWPM;
-        globalErrors += sessionErrors;
-
-        globalAccuracy = calculateAccuracy(globalErrors, globalTotalWordsTyped);
-
+    public void saveEntryData() {
+        sessionTotalWordsTyped += entryWordsTyped;
+        sessionErrors += entryErrors;
     }
 
-    public int incrementSessionErrorCount() {
+    public void resetEntryData() {
+        entryErrors = 0;
+        entryWordsTyped = 0;
+    }
 
-        sessionErrors++;
+    public int calculateSessionAccuracy() {
+        return calculateAccuracy(sessionErrors + entryErrors, sessionTotalWordsTyped + entryWordsTyped);
+    }
 
-        updateSessionAccuracy();
+    public void saveSessionData() {
+        globalTotalWordsTyped += sessionTotalWordsTyped;
+        globalErrors += sessionErrors;
+    }
 
-        return sessionErrors;
+    public void incrementEntryErrorCount() {
+        entryErrors++;
     }
 
     private int calculateAccuracy(int numErrors, int totalWords) {
 
         if (totalWords == 0) return 0;
 
-        return (int)(100 - (numErrors / (double)totalWords) * 100);
+        return (int) (100 - (numErrors / (double) totalWords) * 100);
 
     }
 
