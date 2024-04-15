@@ -31,6 +31,7 @@ public class SummaryController implements Initializable {
     @FXML
     private Label username;
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -46,8 +47,8 @@ public class SummaryController implements Initializable {
         }
 
         setGlobalStatisticsDisplay();
-
     }
+
 
     public void onBeginTypingClicked(ActionEvent event) {
 
@@ -78,30 +79,29 @@ public class SummaryController implements Initializable {
 
                 e.printStackTrace();
             }
-
         }
     }
 
     public void onResetClicked(ActionEvent ae) {
 
         // Set PLAYER_DATA values to 0
-        PLAYER_DATA.setGlobalTotalWordsTyped(0);
-        PLAYER_DATA.setGlobalWPM(0);
-        PLAYER_DATA.setGlobalAccuracy(100);
+        PLAYER_DATA.setGlobalElapsedSeconds(0);
+        PLAYER_DATA.setGlobalErrors(0);
+        PLAYER_DATA.setGlobalKeysPressed(0);
+        PLAYER_DATA.setGlobalWordsTyped(0);
 
         // Save new values to file
         new PlayerDataWriter().writeData(Constants.USER_DATA_FILE);
 
         // Set display values
         setGlobalStatisticsDisplay();
-
     }
+
 
     private void setGlobalStatisticsDisplay() {
 
-        totalTypedWords.setText(Integer.toString(PLAYER_DATA.getGlobalTotalWordsTyped()));
-        avgWPM.setText(Integer.toString(PLAYER_DATA.getGlobalWPM()));
+        totalTypedWords.setText(Integer.toString(PLAYER_DATA.getGlobalWordsTyped()));
         accuracy.setText(PLAYER_DATA.getGlobalAccuracy() + "%");
-
+        avgWPM.setText(Integer.toString(PLAYER_DATA.getGlobalWPM()));
     }
 }
