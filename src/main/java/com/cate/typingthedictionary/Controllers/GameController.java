@@ -14,6 +14,7 @@ import javafx.scene.text.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -21,13 +22,7 @@ import java.util.ResourceBundle;
 public class GameController implements Initializable {
 
     @FXML
-    private Button infoButton;
-
-    @FXML
     private Button skipButton;
-
-    @FXML
-    private Button backButton;
 
     @FXML
     private Text sessionWordsTyped;
@@ -66,22 +61,24 @@ public class GameController implements Initializable {
 
     private AbstractMap.SimpleEntry<String, List<String>> currentEntry;
     private Dictionary dictionary;
-    private boolean isGameRunning  = false;
-    private boolean isEntryValid = false;
-    private Validator validator;
+    private boolean    isGameRunning = false;
+    private boolean    isEntryValid  = false;
+    private Instant    startTime;
+    private Validator  validator;
+
+
+    /* Public methods */
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         loadDictionary();
-        loadNextEntry();
-        displayNextEntry();
-        displaySessionData();
 
         validator = new Validator();
 
         textInput.setFont(TEXT_INPUT_FONT);
 
+        nextWord();
     }
 
     public void handelKeyTyped(KeyEvent ke) {
@@ -100,48 +97,32 @@ public class GameController implements Initializable {
             }
             else {
 
-                startGame();
+                startTime = Instant.now();
 
                 isGameRunning = true;
             }
-
         }
 
         // Handle typed content
         String enteredText = textInput.getText();
 
-        boolean isInputValid   = validator.entryStartsWithText(currentEntry, enteredText);
+        boolean isInputValid    = validator.entryStartsWithText(currentEntry, enteredText);
         boolean isEntryComplete = validator.compareInputAndEntry(enteredText, currentEntry);
 
-        if (isInputValid) {
+        if (isInputValid && !isEntryValid) {
 
             if (ke.getCharacter().charAt(0) == SPACE || ke.getCharacter().charAt(0) == ENTER) {
-
-                PLAYER_DATA.setEntryWordsTyped(countTypedWords(enteredText));
-
                 displaySessionData();
-
             }
-
         }
 
         if (isEntryComplete) {
 
-            // stop time
-            // TODO
-
             isEntryValid = true;
-
-            PLAYER_DATA.setEntryWordsTyped(countTypedWords(enteredText));
 
             displaySessionData();
 
-            // measure WPM
-            // TODO
-
-            PLAYER_DATA.saveEntryData();
-            PLAYER_DATA.saveSessionData();
-
+            saveData();
         }
 
         displayStatusIcons(isInputValid);
@@ -150,15 +131,11 @@ public class GameController implements Initializable {
         if (isEntryValid && ke.getCharacter().charAt(0) == ENTER) {
             nextWord();
         }
-
-
     }
 
     public void onBackClicked(ActionEvent ae) { back(); }
 
     public void onInfoClicked(ActionEvent ae) {
-
-        // TODO: Save data
 
         Main main = new Main();
 
@@ -171,7 +148,6 @@ public class GameController implements Initializable {
 
             e.printStackTrace();
         }
-
     }
 
     public void onSkipClicked(ActionEvent ae) {
@@ -180,41 +156,23 @@ public class GameController implements Initializable {
 
     public void nextWord() {
 
-        // TODO
-        isGameRunning = false;
-
-        PLAYER_DATA.resetEntryData();
-
         clearInput();
-        resetDisplay();
+        resetEntryData();
 
-        loadNextEntry();
-        displayNextEntry();
+        Platform.runLater(() -> {
+            resetDisplay();
 
-        textInput.requestFocus();
+            currentEntry = dictionary.getRandomEntry();
+            displayNextEntry();
 
-        isEntryValid = false;
-
+            textInput.requestFocus();
+        });
     }
 
-    public void startGame() {
 
-        // TODO
-        // Save timestamp
-
-    }
-
-    public void stopGame() {
-
-        // TODO
-        // Save timestamp
-        // calculate WPM
-    }
+    /* Private methods */
 
     private void back() {
-
-        // Stop game
-        // TODO: Save data
 
         Main main = new Main();
 
@@ -227,15 +185,10 @@ public class GameController implements Initializable {
 
             e.printStackTrace();
         }
-
     }
 
     private void clearInput() {
         Platform.runLater(() -> textInput.clear());
-    }
-
-    private int countTypedWords(String inputText) {
-        return inputText.split("\\s+").length;
     }
 
     private void displayNextEntry() {
@@ -260,7 +213,6 @@ public class GameController implements Initializable {
                 definitionText.setFont(DEFINITION_FONT);
 
                 entryText.getChildren().addAll(blankLine, definitionText);
-
             }
 
         });
@@ -269,16 +221,15 @@ public class GameController implements Initializable {
 
     private void displaySessionData() {
 
-        sessionWordsTyped.setText(Integer.toString(PLAYER_DATA.getSessionTotalWordsTyped() + PLAYER_DATA.getEntryWordsTyped()));
-        sessionWPM.setText(Integer.toString(PLAYER_DATA.getSessionWPM()));
+        String inputText = textInput.getText();
 
-        if (PLAYER_DATA.getSessionErrors() + PLAYER_DATA.getEntryErrors() == 0) {
-            sessionAccuracy.setText("100%");
-        }
-        else {
-            sessionAccuracy.setText(PLAYER_DATA.calculateSessionAccuracy() + "%");
-        }
+        int totalSessionWordsTyped = PLAYER_DATA.getSessionWordsTyped(inputText);
+        int totalSessionAccuracy   = PLAYER_DATA.getSessionAccuracyWithEntry(inputText);
+        int totalSessionWPM        = PLAYER_DATA.getSessionWPM(inputText, startTime, Instant.now());
 
+        sessionWordsTyped.setText(Integer.toString(totalSessionWordsTyped));
+        sessionAccuracy.setText(totalSessionAccuracy + "%");
+        sessionWPM.setText(Integer.toString(totalSessionWPM));
     }
 
     private void displayStatusIcons(boolean isInputValid) {
@@ -312,15 +263,7 @@ public class GameController implements Initializable {
     }
 
     private void loadDictionary() {
-
-        // TODO swap back
-//        dictionary = DictionaryLoader.loadDictionaryFromFile(Constants.DEFAULT_DICTIONARY_FILENAME);
-
-        dictionary = DictionaryLoader.loadDictionaryFromFile("dictionaries/sorted_pretty_dictionary.json");
-    }
-
-    private void loadNextEntry() {
-        currentEntry = dictionary.getRandomEntry();
+        dictionary = DictionaryLoader.loadDictionaryFromFile(Constants.DEFAULT_DICTIONARY_FILENAME);
     }
 
     private void resetDisplay() {
@@ -332,7 +275,23 @@ public class GameController implements Initializable {
         skipButton.setText("Skip");
 
         displaySessionData();
+    }
 
+    private void resetEntryData() {
+
+        isGameRunning = false;
+        isEntryValid  = false;
+
+        startTime = null;
+
+        PLAYER_DATA.resetEntryData();
+    }
+
+    private void saveData() {
+
+        PLAYER_DATA.saveAllData(textInput.getText(), startTime, Instant.now());
+
+        new PlayerDataWriter().writeData(Constants.USER_DATA_FILE);
     }
 
 }
