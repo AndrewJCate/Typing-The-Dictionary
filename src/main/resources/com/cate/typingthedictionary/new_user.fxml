@@ -27,6 +27,6 @@
          <Font size="14.0"/>
       </font>
    </TextField>
-   <Button id="submit_username_button" fx:id="submit_username_button" layoutX="501.0" layoutY="324.0"
-           mnemonicParsing="false" onAction="#submit" text="Submit"></Button>
+   <Button id="submit_username_button" layoutX="501.0" layoutY="324.0"
+           mnemonicParsing="false" onAction="#submit" text="Submit">Submit</Button>
 </AnchorPane>

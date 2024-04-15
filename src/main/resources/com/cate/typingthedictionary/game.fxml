@@ -25,12 +25,12 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <Pane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #F2F2F2;">
-        <Button id="backButton" fx:id="backButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#onBackClicked" text="Back" textFill="WHITE">
+        <Button id="backButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#onBackClicked" text="Back" textFill="WHITE">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button id="infoButton" fx:id="infoButton" layoutX="691.0" layoutY="20.0" mnemonicParsing="false" onAction="#onInfoClicked" prefHeight="30.0" prefWidth="30.0" text="?" textFill="WHITE">
+        <Button id="infoButton" layoutX="691.0" layoutY="20.0" mnemonicParsing="false" onAction="#onInfoClicked" prefHeight="30.0" prefWidth="30.0" text="?" textFill="WHITE">
             <font>
                 <Font size="14.0" />
             </font>
