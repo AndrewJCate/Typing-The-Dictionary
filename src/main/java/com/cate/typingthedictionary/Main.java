@@ -43,13 +43,6 @@ public class Main extends Application {
         stg.getScene().setRoot(root);
     }
 
-    @Override
-    public void stop() throws Exception {
-
-        // TODO
-        // Save info before closing
-    }
-
     // TODO: DELETE THIS STUFF
     /*
         Dictionary dictionary = DictionaryLoader.loadDictionaryFromJson(Constants.DEFAULT_DICTIONARY_FILENAME);
