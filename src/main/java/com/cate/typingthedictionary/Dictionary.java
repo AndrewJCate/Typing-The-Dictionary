@@ -27,23 +27,6 @@ public class Dictionary {
         this.DICTIONARY = new HashMap<>();
     }
 
-    public AbstractMap.SimpleEntry<String, List<String>> getRandomEntry() {
-
-        if (this.wordList == null || this.wordList.isEmpty()) {
-            this.createWordList();
-        }
-
-        int randomIndex = new Random().nextInt(this.wordList.size());
-
-        String word = this.wordList.get(randomIndex);
-
-        return new AbstractMap.SimpleEntry<>(word, this.DICTIONARY.get(word));
-
-    }
-
-    public Map<String, List<String>> getAllEntries() {
-        return this.DICTIONARY;
-    }
 
     // Replaces previous word if present
     // Returns true if operation is successful
@@ -64,22 +47,20 @@ public class Dictionary {
         return false;
     }
 
-    // Returns null if word not found
-    public AbstractMap.SimpleEntry<String, List<String>> removeEntry(String word) {
+    public AbstractMap.SimpleEntry<String, List<String>> getRandomEntry() {
 
-        if (!word.trim().isEmpty()) {
-
-            List<String> definitions = this.DICTIONARY.remove(word);
-
-            return new AbstractMap.SimpleEntry<>(word, definitions);
+        if (this.wordList == null || this.wordList.isEmpty()) {
+            this.createWordList();
         }
 
-        return null;
+        int randomIndex = new Random().nextInt(this.wordList.size());
+
+        String word = this.wordList.get(randomIndex);
+
+        return new AbstractMap.SimpleEntry<>(word, this.DICTIONARY.get(word));
+
     }
 
-    public List<String> getWordList() {
-        return this.wordList;
-    }
 
     private void createWordList() {
         this.wordList = new ArrayList<>(this.DICTIONARY.keySet());
