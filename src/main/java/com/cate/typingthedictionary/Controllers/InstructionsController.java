@@ -1,10 +1,11 @@
 package com.cate.typingthedictionary.Controllers;
 
 import com.cate.typingthedictionary.Main;
-import com.cate.typingthedictionary.constants.Constants;
 import javafx.event.ActionEvent;
 
 import java.io.IOException;
+
+import static com.cate.typingthedictionary.constants.Constants.GAME_VIEW;
 
 public class InstructionsController {
 
@@ -13,11 +14,11 @@ public class InstructionsController {
         Main main = new Main();
 
         try {
-            main.changeScene(Constants.GAME_VIEW);
+            main.changeScene(GAME_VIEW);
         }
         catch (IOException e) {
 
-            System.out.println("File " + Constants.GAME_VIEW + " not found.");
+            System.out.println("File " + GAME_VIEW + " not found.");
 
             e.printStackTrace();
         }

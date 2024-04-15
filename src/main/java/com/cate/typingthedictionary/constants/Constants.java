@@ -2,6 +2,10 @@ package com.cate.typingthedictionary.constants;
 
 public class Constants {
 
+    public static final String TITLE = "Type the Dictionary";
+    public static final String STYLES_FILE = "css/styles.css";
+    public static final String ICON_FILE = "/images/icon.png";
+
     public static final String USER_DATA_FILE = "src/data/user_data.txt";
     public static final String SUMMARY_VIEW = "summary.fxml";
     public static final String NEW_USER_VIEW = "new_user.fxml";

@@ -3,12 +3,14 @@ package com.cate.typingthedictionary.Controllers;
 import com.cate.typingthedictionary.Main;
 import com.cate.typingthedictionary.PlayerData;
 import com.cate.typingthedictionary.PlayerDataWriter;
-import com.cate.typingthedictionary.constants.Constants;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+
+import static com.cate.typingthedictionary.constants.Constants.SUMMARY_VIEW;
+import static com.cate.typingthedictionary.constants.Constants.USER_DATA_FILE;
 
 public class NewUserController {
 
@@ -29,16 +31,16 @@ public class NewUserController {
         PLAYER_DATA.setUserName(username);
 
         PlayerDataWriter dataWriter = new PlayerDataWriter();
-        dataWriter.writeData(Constants.USER_DATA_FILE);
+        dataWriter.writeData(USER_DATA_FILE);
 
         Main main = new Main();
 
         try {
-            main.changeScene(Constants.SUMMARY_VIEW);
+            main.changeScene(SUMMARY_VIEW);
         }
         catch (IOException e) {
 
-            System.out.println("File " + Constants.SUMMARY_VIEW + " not found.");
+            System.out.println("File " + SUMMARY_VIEW + " not found.");
 
             e.printStackTrace();
         }

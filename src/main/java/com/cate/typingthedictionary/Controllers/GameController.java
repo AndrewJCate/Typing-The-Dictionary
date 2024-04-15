@@ -1,7 +1,6 @@
 package com.cate.typingthedictionary.Controllers;
 
 import com.cate.typingthedictionary.*;
-import com.cate.typingthedictionary.constants.Constants;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +17,8 @@ import java.time.Instant;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static com.cate.typingthedictionary.constants.Constants.*;
 
 public class GameController implements Initializable {
 
@@ -140,11 +141,11 @@ public class GameController implements Initializable {
         Main main = new Main();
 
         try {
-            main.changeScene(Constants.INFO_VIEW);
+            main.changeScene(INFO_VIEW);
         }
         catch (IOException e) {
 
-            System.out.println("File " + Constants.INFO_VIEW + " not found.");
+            System.out.println("File " + INFO_VIEW + " not found.");
 
             e.printStackTrace();
         }
@@ -177,11 +178,11 @@ public class GameController implements Initializable {
         Main main = new Main();
 
         try {
-            main.changeScene(Constants.SUMMARY_VIEW);
+            main.changeScene(SUMMARY_VIEW);
         }
         catch (IOException e) {
 
-            System.out.println("File " + Constants.SUMMARY_VIEW + " not found.");
+            System.out.println("File " + SUMMARY_VIEW + " not found.");
 
             e.printStackTrace();
         }
@@ -263,7 +264,7 @@ public class GameController implements Initializable {
     }
 
     private void loadDictionary() {
-        dictionary = DictionaryLoader.loadDictionaryFromFile(Constants.DEFAULT_DICTIONARY_FILENAME);
+        dictionary = DictionaryLoader.loadDictionaryFromFile(DEFAULT_DICTIONARY_FILENAME);
     }
 
     private void resetDisplay() {
@@ -291,7 +292,7 @@ public class GameController implements Initializable {
 
         PLAYER_DATA.saveAllData(textInput.getText(), startTime, Instant.now());
 
-        new PlayerDataWriter().writeData(Constants.USER_DATA_FILE);
+        new PlayerDataWriter().writeData(USER_DATA_FILE);
     }
 
 }
