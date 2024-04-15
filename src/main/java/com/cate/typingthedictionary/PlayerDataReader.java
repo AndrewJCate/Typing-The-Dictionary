@@ -26,11 +26,12 @@ public class PlayerDataReader {
 
                 int[] statisticsArray = parseStatistics(statisticsString);
 
-                if (statisticsArray.length >= 3) {
+                if (statisticsArray.length >= 4) {
 
-                    PLAYER_DATA.setGlobalTotalWordsTyped(statisticsArray[0]);
-                    PLAYER_DATA.setGlobalWPM(statisticsArray[1]);
-                    PLAYER_DATA.setGlobalAccuracy(statisticsArray[2]);
+                    PLAYER_DATA.setGlobalElapsedSeconds(statisticsArray[0]);
+                    PLAYER_DATA.setGlobalErrors(statisticsArray[1]);
+                    PLAYER_DATA.setGlobalKeysPressed(statisticsArray[2]);
+                    PLAYER_DATA.setGlobalWordsTyped(statisticsArray[3]);
                 }
 
             }
