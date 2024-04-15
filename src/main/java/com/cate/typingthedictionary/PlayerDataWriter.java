@@ -32,11 +32,13 @@ public class PlayerDataWriter {
 
     private String playerStatisticsToString() {
 
-        return PLAYER_DATA.getGlobalTotalWordsTyped() +
+        return PLAYER_DATA.getGlobalElapsedSeconds() +
                 " " +
-                PLAYER_DATA.getGlobalWPM() +
+                PLAYER_DATA.getGlobalErrors() +
                 " " +
-                PLAYER_DATA.getGlobalAccuracy();
+                PLAYER_DATA.getGlobalKeysPressed() +
+                " " +
+                PLAYER_DATA.getGlobalWordsTyped();
 
     }
 }
