@@ -21,8 +21,6 @@ import java.util.ResourceBundle;
 
 import static com.cate.typingthedictionary.constants.Constants.*;
 
-// TODO: fix bug with accuracy (Enter at beginning of entry)
-
 public class GameController implements Initializable {
 
     @FXML

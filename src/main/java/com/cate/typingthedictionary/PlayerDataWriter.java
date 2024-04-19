@@ -39,6 +39,5 @@ public class PlayerDataWriter {
                 PLAYER_DATA.getGlobalKeysPressed() +
                 " " +
                 PLAYER_DATA.getGlobalWordsTyped();
-
     }
 }

@@ -44,44 +44,4 @@ public class Main extends Application {
 
         stg.getScene().setRoot(root);
     }
-
-    // TODO: DELETE THIS STUFF
-    /*
-        Dictionary dictionary = DictionaryLoader.loadDictionaryFromJson(Constants.DEFAULT_DICTIONARY_FILENAME);
-
-        Map<String, List<String>> entries = dictionary.getAllEntries();
-
-        for (String entry : entries.keySet()) {
-            System.out.println(entry);
-
-            for (String definition : entries.get(entry)) {
-                System.out.println(definition);
-            }
-
-            System.out.println();
-        }
-
-        AbstractMap.SimpleEntry<String, List<String>> entry = dictionary.getRandomEntry();
-        System.out.println(entry.getKey());
-        System.out.println(entry.getValue());
-
-        int longest = 0;
-        String longestWord = "";
-        String longestDef = "";
-
-        for (
-            Map.Entry<String, List<String>> entry : dictionary.getAllEntries()) {
-
-            int len = entry.getKey().length() + entry.getValue().length();
-
-            if (len > longest) {
-                longest = len;
-                longestWord = entry.getKey();
-                longestDef = entry.getValue();
-            }
-
-        }
-
-        System.out.println("Longest = " + longest + ": " + longestWord + " " + longestDef);
-    */
 }

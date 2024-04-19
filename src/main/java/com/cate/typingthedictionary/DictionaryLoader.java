@@ -10,9 +10,6 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
-// Load dictionary from file
-//
-
 public class DictionaryLoader {
 
     // Attempts to retrieve the JSON dictionary from the provided file.
@@ -51,7 +48,6 @@ public class DictionaryLoader {
         }
 
         return dictionary;
-
     }
 
 }
