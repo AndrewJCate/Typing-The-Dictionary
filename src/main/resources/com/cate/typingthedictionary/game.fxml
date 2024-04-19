@@ -40,7 +40,7 @@
                 <Font size="14.0" />
             </font>
         </Button>
-        <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="150.0" layoutY="63.0" prefHeight="140.0" prefWidth="500.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" styleClass="edge-to-edge">
+        <ScrollPane id="entryScrollPane" fx:id="entryScrollPane" fitToHeight="true" fitToWidth="true" layoutX="150.0" layoutY="63.0" prefHeight="140.0" prefWidth="500.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" styleClass="edge-to-edge">
             <TextFlow id="entryText" fx:id="entryText" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
         </ScrollPane>
         <TextArea id="textInput" fx:id="textInput" layoutX="149.0" layoutY="234.0" onKeyTyped="#handelKeyTyped" prefHeight="140.0" prefWidth="500.0" promptText="Type entry here." style="-fx-text-fill: #1C344C;" wrapText="true">
@@ -95,9 +95,8 @@
         <ImageView id="wrongImage" fx:id="wrongImage" fitHeight="45.0" fitWidth="45.0" layoutX="88.0" layoutY="234.0" pickOnBounds="true" preserveRatio="true" visible="false">
             <Image url="@../../../images/wrong.png" />
         </ImageView>
-        <ImageView id="doubleCorrectImage" fx:id="doubleCorrectImage" fitHeight="45.0" fitWidth="45.0" layoutX="30.0"
-                   layoutY="234.0" pickOnBounds="true" preserveRatio="true" visible="false">
-            <Image url="@../../../images/check.png"/>
+        <ImageView id="doubleCorrectImage" fx:id="doubleCorrectImage" fitHeight="45.0" fitWidth="45.0" layoutX="30.0" layoutY="234.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <Image url="@../../../images/check.png" />
         </ImageView>
     </Pane>
 </GridPane>
