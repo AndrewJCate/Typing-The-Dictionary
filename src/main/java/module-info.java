@@ -7,5 +7,7 @@ module com.cate.typingthedictionary {
     exports com.cate.typingthedictionary;
     exports com.cate.typingthedictionary.Controllers;
     opens com.cate.typingthedictionary.Controllers to javafx.fxml;
+    exports com.cate.typingthedictionary.io;
+    opens com.cate.typingthedictionary.io to javafx.fxml;
 
 }

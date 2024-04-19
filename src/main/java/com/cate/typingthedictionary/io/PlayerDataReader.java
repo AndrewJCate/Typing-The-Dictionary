@@ -1,4 +1,6 @@
-package com.cate.typingthedictionary;
+package com.cate.typingthedictionary.io;
+
+import com.cate.typingthedictionary.PlayerData;
 
 import java.io.*;
 import java.util.stream.Stream;

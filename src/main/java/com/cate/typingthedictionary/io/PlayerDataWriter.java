@@ -1,5 +1,6 @@
-package com.cate.typingthedictionary;
+package com.cate.typingthedictionary.io;
 
+import com.cate.typingthedictionary.PlayerData;
 import com.cate.typingthedictionary.constants.Constants;
 
 import java.io.BufferedWriter;

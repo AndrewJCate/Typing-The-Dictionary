@@ -1,5 +1,6 @@
-package com.cate.typingthedictionary;
+package com.cate.typingthedictionary.io;
 
+import com.cate.typingthedictionary.Dictionary;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

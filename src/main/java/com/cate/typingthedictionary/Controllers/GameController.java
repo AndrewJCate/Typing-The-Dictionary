@@ -1,6 +1,8 @@
 package com.cate.typingthedictionary.Controllers;
 
 import com.cate.typingthedictionary.*;
+import com.cate.typingthedictionary.io.DictionaryLoader;
+import com.cate.typingthedictionary.io.PlayerDataWriter;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

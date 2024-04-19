@@ -2,7 +2,7 @@ package com.cate.typingthedictionary.Controllers;
 
 import com.cate.typingthedictionary.Main;
 import com.cate.typingthedictionary.PlayerData;
-import com.cate.typingthedictionary.PlayerDataWriter;
+import com.cate.typingthedictionary.io.PlayerDataWriter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
