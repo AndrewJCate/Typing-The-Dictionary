@@ -134,6 +134,8 @@ public class PlayerData {
 
         if (numErrors == 0) return 100;
 
+        if (totalWords == 0) return 0;
+
         return (int) (100 - (numErrors / (double) totalWords) * 100);
 
     }
