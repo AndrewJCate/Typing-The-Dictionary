@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -20,19 +21,15 @@ import java.util.ResourceBundle;
 
 import static com.cate.typingthedictionary.constants.Constants.*;
 
+// TODO: fix bug with accuracy (Enter at beginning of entry)
+
 public class GameController implements Initializable {
 
     @FXML
     private Button skipButton;
 
     @FXML
-    private Text sessionWordsTyped;
-
-    @FXML
-    private Text sessionWPM;
-
-    @FXML
-    private Text sessionAccuracy;
+    private ScrollPane entryScrollPane;
 
     @FXML
     private TextFlow entryText;
@@ -49,6 +46,15 @@ public class GameController implements Initializable {
     @FXML
     private ImageView doubleCorrectImage;
 
+    @FXML
+    private Text sessionWordsTyped;
+
+    @FXML
+    private Text sessionWPM;
+
+    @FXML
+    private Text sessionAccuracy;
+
     static final int BACK_SPACE = 8;
     static final int ENTER      = 13;
     static final int ESCAPE     = 27;
@@ -62,8 +68,10 @@ public class GameController implements Initializable {
 
     private AbstractMap.SimpleEntry<String, List<String>> currentEntry;
     private Dictionary dictionary;
+    private int        linesTyped = 1;
     private boolean    isGameRunning = false;
     private boolean    isEntryValid  = false;
+    private boolean    previousEnter = false;
     private Instant    startTime;
     private Validator  validator;
 
@@ -113,7 +121,10 @@ public class GameController implements Initializable {
         if (isInputValid && !isEntryValid) {
 
             if (ke.getCharacter().charAt(0) == SPACE || ke.getCharacter().charAt(0) == ENTER) {
+
                 displaySessionData();
+
+                autoScroll(ke);
             }
         }
 
@@ -155,23 +166,60 @@ public class GameController implements Initializable {
         nextWord();
     }
 
-    public void nextWord() {
-
-        clearInput();
-        resetEntryData();
-
-        Platform.runLater(() -> {
-            resetDisplay();
-
-            currentEntry = dictionary.getRandomEntry();
-            displayNextEntry();
-
-            textInput.requestFocus();
-        });
-    }
-
 
     /* Private methods */
+
+    private void autoScroll(KeyEvent ke) {
+
+        final int WORDS_PER_LINE = 11;
+        final int SCROLL_AMOUNT = 19;
+        final int ENTRY_HEIGHT = 137;
+
+        List<String> definitions = currentEntry.getValue();
+
+        int wordCount = 0;
+
+        for (String def : definitions) {
+            wordCount += def.split("\\s+").length;
+        }
+
+        int numEntries = currentEntry.getValue().size();
+
+        if (wordCount / numEntries > WORDS_PER_LINE) {
+
+            int inputWordsLength = textInput.getText().split("\\s+").length;
+
+            // Scroll after typing > WORDS_PER_LINE
+            if (inputWordsLength >= WORDS_PER_LINE * linesTyped) {
+
+                double extraHeight = entryText.getHeight() - ENTRY_HEIGHT;
+
+                if (extraHeight > 1) {
+
+                    setAutoScrollAmount(extraHeight, SCROLL_AMOUNT);
+
+                    linesTyped++;
+                }
+            }
+        }
+
+        // Scroll after sequential ENTERs
+        if (ke.getCharacter().charAt(0) == ENTER) {
+
+            previousEnter = !previousEnter;
+
+            double extraHeight = entryText.getHeight() - ENTRY_HEIGHT;
+
+            if (extraHeight > 1) {
+
+                setAutoScrollAmount(extraHeight, SCROLL_AMOUNT);
+
+                if (previousEnter) {
+                    linesTyped++;
+                }
+            }
+        }
+    }
 
     private void back() {
 
@@ -264,7 +312,8 @@ public class GameController implements Initializable {
     }
 
     private void loadDictionary() {
-        dictionary = DictionaryLoader.loadDictionaryFromFile(DEFAULT_DICTIONARY_FILENAME);
+//        dictionary = DictionaryLoader.loadDictionaryFromFile(DEFAULT_DICTIONARY_FILENAME);    // TODO: use this one
+        dictionary = DictionaryLoader.loadDictionaryFromFile("dictionaries/longDictionary_sorted.json");
     }
 
     private void resetDisplay() {
@@ -278,10 +327,29 @@ public class GameController implements Initializable {
         displaySessionData();
     }
 
+    private void nextWord() {
+
+        clearInput();
+        resetEntryData();
+
+        Platform.runLater(() -> {
+            resetDisplay();
+
+            currentEntry = dictionary.getRandomEntry();
+            displayNextEntry();
+
+            textInput.requestFocus();
+        });
+    }
+
     private void resetEntryData() {
 
         isGameRunning = false;
         isEntryValid  = false;
+
+        previousEnter = false;
+        linesTyped = 1;
+        entryScrollPane.setVvalue(0);
 
         startTime = null;
 
@@ -293,6 +361,15 @@ public class GameController implements Initializable {
         PLAYER_DATA.saveAllData(textInput.getText(), startTime, Instant.now());
 
         new PlayerDataWriter().writeData(USER_DATA_FILE);
+    }
+
+    private void setAutoScrollAmount(double extraHeight, int SCROLL_AMOUNT) {
+
+        double extraLines = extraHeight / SCROLL_AMOUNT;
+
+        double scrollAmount = (100 / extraLines) / 100;
+
+        entryScrollPane.setVvalue(entryScrollPane.getVvalue() + scrollAmount);
     }
 
 }
