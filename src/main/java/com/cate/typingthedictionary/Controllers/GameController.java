@@ -106,8 +106,6 @@ public class GameController implements Initializable {
     private Instant    startTime;
     private Validator  validator;
 
-    // TODO: Bug when typing the final period. Should not impact statistics.
-
 
     /* Public methods */
 
@@ -202,7 +200,7 @@ public class GameController implements Initializable {
             }
         }
 
-        if (isEntryComplete) {
+        if (isEntryComplete && !isEntryValid) {
 
             isEntryValid = true;
 
