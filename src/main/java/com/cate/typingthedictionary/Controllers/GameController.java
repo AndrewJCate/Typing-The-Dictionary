@@ -1,6 +1,9 @@
 package com.cate.typingthedictionary.Controllers;
 
-import com.cate.typingthedictionary.*;
+import com.cate.typingthedictionary.Dictionary;
+import com.cate.typingthedictionary.Main;
+import com.cate.typingthedictionary.PlayerData;
+import com.cate.typingthedictionary.Validator;
 import com.cate.typingthedictionary.io.DictionaryLoader;
 import com.cate.typingthedictionary.io.PlayerDataWriter;
 import javafx.application.Platform;
@@ -23,6 +26,15 @@ import java.util.ResourceBundle;
 
 import static com.cate.typingthedictionary.constants.Constants.*;
 
+/**
+ * Handles the main logic of the game:
+ *  - displays a random entry
+ *  - analyzes input text
+ *  - displays feedback icons
+ *  - displays statistical data
+ *
+ * Buttons and keyboard shortcuts facilitate movement to other screens.
+ */
 public class GameController implements Initializable {
 
     @FXML
@@ -55,6 +67,7 @@ public class GameController implements Initializable {
     @FXML
     private Text sessionAccuracy;
 
+
     static final int BACK_SPACE = 8;
     static final int ENTER      = 13;
     static final int ESCAPE     = 27;
@@ -64,16 +77,36 @@ public class GameController implements Initializable {
     private final Font DEFINITION_FONT = Font.font("System", FontWeight.NORMAL, FontPosture.REGULAR, 16);
     private final Font TEXT_INPUT_FONT = Font.font("Tahoma", FontWeight.NORMAL, FontPosture.REGULAR, 16);
 
+    private final int ENTRY_HEIGHT   = 137;
+    private final int LINE_HEIGHT    = 19;
+    private final int WORDS_PER_LINE = 11;
+
     private final PlayerData PLAYER_DATA = PlayerData.getInstance();
 
     private AbstractMap.SimpleEntry<String, List<String>> currentEntry;
     private Dictionary dictionary;
+
+    /**
+     * The number of lines of input text, roughly set.
+     */
     private int        linesTyped = 1;
+
     private boolean    isGameRunning = false;
+
+    /**
+     * Has input text correctly matched entire entry text.
+     */
     private boolean    isEntryValid  = false;
+
+    /**
+     * Was the previous character an Enter? Used for regulating autoscroll.
+     */
     private boolean    previousEnter = false;
+
     private Instant    startTime;
     private Validator  validator;
+
+    // TODO: Bug when typing the final period. Should not impact statistics.
 
 
     /* Public methods */
@@ -90,6 +123,47 @@ public class GameController implements Initializable {
         nextWord();
     }
 
+    /**
+     * Each time a key is pressed, the following happens:
+     *
+     *  - If the first key pressed is Escape, the game window goes back to the Summary screen.
+     *  - If the first key pressed is Backspace, the current entry is skipping and a new entry is displayed (clearing
+     *  any existing entry data without saving it to the session data).
+     *  - If the first key pressed is any other than the above, it starts the game timer which is used to calculate
+     *  words typed per minute.
+     *
+     *  Validation:
+     *    - The input text is compared against the entry text.
+     *    - If the entry text starts with the input text, a check mark icon is displayed.
+     *    - If not, an "x" icon is displayed.
+     *
+     *  Statistics:
+     *    - Errors are incremented only after input text is accurate (or the first keystroke). Sequential errors only
+     *  count as one error until corrected.
+     *    - Statistics are calculated and displays updated.
+     *    - These include:
+     *      - Number of words typed (actual word count, not average).
+     *      - Words typed per minute (uses an average word count and factors in accuracy {@link PlayerData}.
+     *      - Accuracy as a percentage of total words typed (actual count, not average).
+     *
+     *  Triggers autoscroll.
+     *
+     *  Input matches entry text:
+     *    - If the input text matches the entry text, the entry data is added to the session data which is saved to
+     *    calculate statistics across multiple play sessions.
+     *    - A second check mark is displayed to signal the entry has been completed correctly.
+     *    - If Enter is pressed, the next random entry will display and the user can continue typing.
+     *
+     *  Buttons are available:
+     *    - Back: return the user to the Summary screen (keyboard shortcut Escape).
+     *    - Skip: displays a new random entry (erasing current entry data) (keyboard shortcut Backspace before typing
+     *    anything of the current entry).
+     *    - When an entry has been typed successfully, the Skip text changes to Next but the function does not change
+     *    (keyboard shortcut Enter).
+     *    - ?: displays the user instructions. This is the only button without a keyboard shortcut.
+     *
+     * @param ke the KeyEvent
+     */
     public void handelKeyTyped(KeyEvent ke) {
 
         // Handle ESCAPE
@@ -147,6 +221,9 @@ public class GameController implements Initializable {
 
     public void onBackClicked(ActionEvent ae) { back(); }
 
+    /**
+     * Displays the instruction screen.
+     */
     public void onInfoClicked(ActionEvent ae) {
 
         Main main = new Main();
@@ -169,11 +246,18 @@ public class GameController implements Initializable {
 
     /* Private methods */
 
+    /**
+     * Some entries require scrolling (entry text > than ENTRY_HEIGHT). This can be done with the mouse scroll wheel,
+     * page up/down keys, or arrow keys but is inconvenient when typing. The autoscroll feature automatically scrolls
+     * down an appropriate amount (either a calculated amount or SCROLL_AMOUNT) to expose more of the entry text without
+     * requiring the user to stop typing.
+     *
+     * Autoscroll triggers when the user presses Enter.
+     * Autoscroll triggers when a certain number of words (WORDS_PER_LINE) have been typed without Enter being pressed.
+     *
+     * @param ke the KeyEvent
+     */
     private void autoScroll(KeyEvent ke) {
-
-        final int WORDS_PER_LINE = 11;
-        final int SCROLL_AMOUNT = 19;
-        final int ENTRY_HEIGHT = 137;
 
         List<String> definitions = currentEntry.getValue();
 
@@ -183,9 +267,9 @@ public class GameController implements Initializable {
             wordCount += def.split("\\s+").length;
         }
 
-        int numEntries = currentEntry.getValue().size();
+        int definitionNumber = currentEntry.getValue().size();
 
-        if (wordCount / numEntries > WORDS_PER_LINE) {
+        if (wordCount / definitionNumber > WORDS_PER_LINE) {
 
             int inputWordsLength = textInput.getText().split("\\s+").length;
 
@@ -196,7 +280,7 @@ public class GameController implements Initializable {
 
                 if (extraHeight > 1) {
 
-                    setAutoScrollAmount(extraHeight, SCROLL_AMOUNT);
+                    scroll(extraHeight);
 
                     linesTyped++;
                 }
@@ -212,7 +296,7 @@ public class GameController implements Initializable {
 
             if (extraHeight > 1) {
 
-                setAutoScrollAmount(extraHeight, SCROLL_AMOUNT);
+                scroll(extraHeight);
 
                 if (previousEnter) {
                     linesTyped++;
@@ -221,6 +305,9 @@ public class GameController implements Initializable {
         }
     }
 
+    /**
+     * Returns the user to the Summary screen.
+     */
     private void back() {
 
         Main main = new Main();
@@ -236,10 +323,16 @@ public class GameController implements Initializable {
         }
     }
 
+    /**
+     * Removes any text from the text input area.
+     */
     private void clearInput() {
         Platform.runLater(() -> textInput.clear());
     }
 
+    /**
+     * Displays the next random entry.
+     */
     private void displayNextEntry() {
 
         final String BLANK_LINE = "\n\n";
@@ -268,11 +361,14 @@ public class GameController implements Initializable {
 
     }
 
+    /**
+     * Display session data which may include entry data.
+     */
     private void displaySessionData() {
 
         String inputText = textInput.getText();
 
-        int totalSessionWordsTyped = PLAYER_DATA.getSessionWordsTyped(inputText);
+        int totalSessionWordsTyped = PLAYER_DATA.getSessionWordsTypedWithEntry(inputText);
         int totalSessionAccuracy   = PLAYER_DATA.getSessionAccuracyWithEntry(inputText);
         int totalSessionWPM        = PLAYER_DATA.getSessionWPM(inputText, startTime, Instant.now());
 
@@ -281,6 +377,15 @@ public class GameController implements Initializable {
         sessionWPM.setText(Integer.toString(totalSessionWPM));
     }
 
+    /**
+     * Display status icons.
+     *
+     * A single check mark for correctly input text.
+     * A single "x" mark for an error.
+     * A double check mark for a successfully completed entry.
+     *
+     * @param isInputValid the is input valid
+     */
     private void displayStatusIcons(boolean isInputValid) {
 
         // Display correct entry icon
@@ -308,14 +413,18 @@ public class GameController implements Initializable {
 
             displaySessionData();
         }
-
     }
 
+    /**
+     * Loads the dictionary to use for entries.
+     */
     private void loadDictionary() {
-//        dictionary = DictionaryLoader.loadDictionaryFromFile(DEFAULT_DICTIONARY_FILENAME);    // TODO: use this one
-        dictionary = DictionaryLoader.loadDictionaryFromFile("dictionaries/longDictionary_sorted.json");
+        dictionary = DictionaryLoader.loadDictionaryFromFile(DEFAULT_DICTIONARY_FILENAME);
     }
 
+    /**
+     * Clears the icons, corrects the "Skip" button name and displays current statistics.
+     */
     private void resetDisplay() {
 
         wrongImage.setVisible(false);
@@ -327,6 +436,9 @@ public class GameController implements Initializable {
         displaySessionData();
     }
 
+    /**
+     * Resets the game screen to its starting position with updated statistics and displays a new random entry.
+     */
     private void nextWord() {
 
         clearInput();
@@ -342,6 +454,10 @@ public class GameController implements Initializable {
         });
     }
 
+    /**
+     * Resets entry data. This has the intended side effect of deleting any unsaved entry statistic data. Entry data
+     * is saved when the entry has been typed successfully.
+     */
     private void resetEntryData() {
 
         isGameRunning = false;
@@ -356,6 +472,11 @@ public class GameController implements Initializable {
         PLAYER_DATA.resetEntryData();
     }
 
+    /**
+     * Adds entry data to session data and session data to global data.
+     *
+     * Writes the resulting data to a file to be used during future play sessions.
+     */
     private void saveData() {
 
         PLAYER_DATA.saveAllData(textInput.getText(), startTime, Instant.now());
@@ -363,9 +484,23 @@ public class GameController implements Initializable {
         new PlayerDataWriter().writeData(USER_DATA_FILE);
     }
 
-    private void setAutoScrollAmount(double extraHeight, int SCROLL_AMOUNT) {
+    /**
+     * Scrolls a calculated amount.
+     *
+     * Scroll amount (vValue) is always from 0 (at top) to 100 (at bottom), regardless of whether the distance to be
+     * scrolled is 10 pixels or 10_000.
+     *
+     * The amount to scroll is calculated based on a percentage of the total distance that needs to be scrolled.
+     * ENTRY_HEIGHT is the height of the entry display in pixels. extraHeight is calculated based on the amount of
+     * pixels the entry uses beyond that height. This is the amount that is left to be displayed, or the amount that
+     * needs to be scrolled. This extraHeight is divided by the estimated height of a single line (LINE_HEIGHT) to
+     * get the rough amount that needs to be scrolled each time the scroll triggers.
+     *
+     * @param extraHeight   the extra height that needs to be scrolled
+     */
+    private void scroll(double extraHeight) {
 
-        double extraLines = extraHeight / SCROLL_AMOUNT;
+        double extraLines = extraHeight / LINE_HEIGHT;
 
         double scrollAmount = (100 / extraLines) / 100;
 

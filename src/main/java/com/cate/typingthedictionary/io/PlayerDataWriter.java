@@ -7,10 +7,27 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Writes player statistics data to a file.
+ */
 public class PlayerDataWriter {
 
     private final PlayerData PLAYER_DATA = PlayerData.getInstance();
 
+    /**
+     * Writes player username and statistics data to a file. The text file format is:
+     *
+     * username
+     * ## ## ## ##
+     *
+     * Order of the statistics data:
+     *  - global elapsed seconds
+     *  - global errors
+     *  - global keystrokes
+     *  - global words typed
+     *
+     * @param fileName the file name
+     */
     public void writeData(String fileName) {
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
@@ -37,7 +54,7 @@ public class PlayerDataWriter {
                 " " +
                 PLAYER_DATA.getGlobalErrors() +
                 " " +
-                PLAYER_DATA.getGlobalKeysPressed() +
+                PLAYER_DATA.getGlobalKeystrokes() +
                 " " +
                 PLAYER_DATA.getGlobalWordsTyped();
     }

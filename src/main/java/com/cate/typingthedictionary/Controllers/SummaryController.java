@@ -17,6 +17,10 @@ import java.util.ResourceBundle;
 
 import static com.cate.typingthedictionary.constants.Constants.*;
 
+/**
+ * The Summary screen is the home screen of the application. Here, global user statistics are displayed and a button
+ * to begin the typing game.
+ */
 public class SummaryController implements Initializable {
 
     private final PlayerData PLAYER_DATA = PlayerData.getInstance();
@@ -34,6 +38,12 @@ public class SummaryController implements Initializable {
     private Label username;
 
 
+    /**
+     * Reads a data file. If data is present in the file, the userName is displayed.
+     *
+     * @param url            the url
+     * @param resourceBundle the resource bundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -52,6 +62,12 @@ public class SummaryController implements Initializable {
     }
 
 
+    /**
+     * If the user data file does not exist, changes to the New User screen to get the username from the user. If the
+     * file does exist, changes to the game screen.
+     *
+     * @param event the event
+     */
     public void onBeginTypingClicked(ActionEvent event) {
 
         Main main = new Main();
@@ -84,12 +100,17 @@ public class SummaryController implements Initializable {
         }
     }
 
+    /**
+     * Resets global user data and saves changes to the file.
+     *
+     * @param ae the ae
+     */
     public void onResetClicked(ActionEvent ae) {
 
         // Set PLAYER_DATA values to 0
         PLAYER_DATA.setGlobalElapsedSeconds(0);
         PLAYER_DATA.setGlobalErrors(0);
-        PLAYER_DATA.setGlobalKeysPressed(0);
+        PLAYER_DATA.setGlobalKeystrokes(0);
         PLAYER_DATA.setGlobalWordsTyped(0);
 
         // Save new values to file
@@ -100,6 +121,9 @@ public class SummaryController implements Initializable {
     }
 
 
+    /**
+     * Sets global statistics display.
+     */
     private void setGlobalStatisticsDisplay() {
 
         totalTypedWords.setText(Integer.toString(PLAYER_DATA.getGlobalWordsTyped()));

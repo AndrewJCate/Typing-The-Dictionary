@@ -5,10 +5,28 @@ import com.cate.typingthedictionary.PlayerData;
 import java.io.*;
 import java.util.stream.Stream;
 
+/**
+ * Reads player statistics and username data from a file.
+ */
 public class PlayerDataReader {
 
     private static final PlayerData PLAYER_DATA = PlayerData.getInstance();
 
+    /**
+     * Read player data from a file. The data should be in the following format:
+     *
+     * username
+     * ## ## ## ##
+     *
+     * Order of the statistics data:
+     *  - global elapsed seconds
+     *  - global errors
+     *  - global keystrokes
+     *  - global words typed
+     *
+     * @param fileName the file name
+     * @return the player data
+     */
     public PlayerData readData(String fileName) {
 
         // Load user data file
@@ -32,7 +50,7 @@ public class PlayerDataReader {
 
                     PLAYER_DATA.setGlobalElapsedSeconds(statisticsArray[0]);
                     PLAYER_DATA.setGlobalErrors(statisticsArray[1]);
-                    PLAYER_DATA.setGlobalKeysPressed(statisticsArray[2]);
+                    PLAYER_DATA.setGlobalKeystrokes(statisticsArray[2]);
                     PLAYER_DATA.setGlobalWordsTyped(statisticsArray[3]);
                 }
 

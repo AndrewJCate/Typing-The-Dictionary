@@ -12,6 +12,10 @@ import java.io.IOException;
 import static com.cate.typingthedictionary.constants.Constants.SUMMARY_VIEW;
 import static com.cate.typingthedictionary.constants.Constants.USER_DATA_FILE;
 
+/**
+ * New User controller gets a user input username and stores it in the {@link PlayerData} instance. The username is
+ * displayed on the Summary screen.
+ */
 public class NewUserController {
 
     private final PlayerData PLAYER_DATA = PlayerData.getInstance();
@@ -24,6 +28,11 @@ public class NewUserController {
         this.submit(ae);
     }
 
+    /**
+     * Adds the username data to the {@link PlayerData} instance and writes the data to a file.
+     *
+     * @param ae the ae
+     */
     public void submit(ActionEvent ae) {
 
         String username = this.username_input.getText();

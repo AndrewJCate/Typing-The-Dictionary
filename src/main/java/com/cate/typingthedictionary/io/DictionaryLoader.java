@@ -11,9 +11,18 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Dictionary loader handles reading dictionary data from a JSON file.
+ */
 public class DictionaryLoader {
 
-    // Attempts to retrieve the JSON dictionary from the provided file.
+    /**
+     * Reads from a JSON file and adds entries from the data into a new {@link Dictionary}.
+     *
+     * @param fileName the file name
+     * @return the dictionary
+     */
+// Attempts to retrieve the JSON dictionary from the provided file.
     // Returns Map with String key as the word and List<String> value as the word's definitions.
     // Returns empty HashMap if no JSON data is found.
     public static Dictionary loadDictionaryFromFile(String fileName) {
