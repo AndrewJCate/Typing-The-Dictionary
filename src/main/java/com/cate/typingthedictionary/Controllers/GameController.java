@@ -1,9 +1,6 @@
 package com.cate.typingthedictionary.Controllers;
 
-import com.cate.typingthedictionary.Dictionary;
-import com.cate.typingthedictionary.Main;
-import com.cate.typingthedictionary.PlayerData;
-import com.cate.typingthedictionary.Validator;
+import com.cate.typingthedictionary.*;
 import com.cate.typingthedictionary.io.DictionaryLoader;
 import com.cate.typingthedictionary.io.PlayerDataWriter;
 import javafx.application.Platform;
@@ -19,6 +16,7 @@ import javafx.scene.text.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.AbstractMap;
 import java.util.List;
@@ -82,6 +80,7 @@ public class GameController implements Initializable {
     private final int WORDS_PER_LINE = 11;
 
     private final PlayerData PLAYER_DATA = PlayerData.getInstance();
+    private final Statistics STATISTICS = new Statistics();
 
     private AbstractMap.SimpleEntry<String, List<String>> currentEntry;
     private Dictionary dictionary;
@@ -141,7 +140,7 @@ public class GameController implements Initializable {
      *    - Statistics are calculated and displays updated.
      *    - These include:
      *      - Number of words typed (actual word count, not average).
-     *      - Words typed per minute (uses an average word count and factors in accuracy {@link PlayerData}.
+     *      - Words typed per minute (uses an average word count and factors in accuracy {@link PlayerData}).
      *      - Accuracy as a percentage of total words typed (actual count, not average).
      *
      *  Triggers autoscroll.
@@ -187,7 +186,7 @@ public class GameController implements Initializable {
         // Handle typed content
         String enteredText = textInput.getText();
 
-        boolean isInputValid    = validator.entryStartsWithText(currentEntry, enteredText);
+        boolean isInputValid    = validator.entryStartsWithText(enteredText, currentEntry);
         boolean isEntryComplete = validator.compareInputAndEntry(enteredText, currentEntry);
 
         if (isInputValid && !isEntryValid) {
@@ -322,6 +321,50 @@ public class GameController implements Initializable {
     }
 
     /**
+     * Calculates session accuracy that includes the current entry data.
+     *
+     * @return the accuracy
+     */
+    private int calculateSessionAccuracy() {
+
+        int entryWordsTyped        = STATISTICS.countWords(textInput.getText());
+        int totalSessionWordsTyped = entryWordsTyped + PLAYER_DATA.getSessionWordsTyped();
+        int totalSessionErrors     = PLAYER_DATA.getEntryErrors() + PLAYER_DATA.getSessionErrors();
+
+        return STATISTICS.calculateAccuracy(totalSessionErrors, totalSessionWordsTyped);
+    }
+
+    /**
+     * Calculates session words per minute (WPM).
+     *
+     * Calculates WPM based on available data. If start/stop times are available, it will return WPM based on session
+     * and entry data. If start/stop times are not available, it will return WPM based on session data only.
+     *
+     * @return the session words per minute, possibly including entry data
+     */
+    private int calculateSessionWPM() {
+
+        long sessionElapsedSeconds = PLAYER_DATA.getSessionElapsedSeconds();
+        int  sessionErrors     = PLAYER_DATA.getSessionErrors();
+        long sessionKeystrokes = PLAYER_DATA.getSessionKeystrokes();
+        int  sessionWordsTyped = PLAYER_DATA.getSessionWordsTyped();
+
+        if (startTime == null) {
+
+            int sessionAccuracy = STATISTICS.calculateAccuracy(sessionErrors,sessionWordsTyped);
+
+            return STATISTICS.calculateWPM(sessionKeystrokes, sessionElapsedSeconds, sessionAccuracy);
+        }
+
+        long totalSessionKeysPressed    = textInput.getText().length() + sessionKeystrokes;
+        long entryElapsedSeconds        = Duration.between(startTime, Instant.now()).toSeconds();
+        long totalSessionElapsedSeconds = entryElapsedSeconds + sessionElapsedSeconds;
+
+        return STATISTICS.calculateWPM(totalSessionKeysPressed, totalSessionElapsedSeconds,
+                calculateSessionAccuracy());
+    }
+
+    /**
      * Removes any text from the text input area.
      */
     private void clearInput() {
@@ -366,9 +409,9 @@ public class GameController implements Initializable {
 
         String inputText = textInput.getText();
 
-        int totalSessionWordsTyped = PLAYER_DATA.getSessionWordsTypedWithEntry(inputText);
-        int totalSessionAccuracy   = PLAYER_DATA.getSessionAccuracyWithEntry(inputText);
-        int totalSessionWPM        = PLAYER_DATA.getSessionWPM(inputText, startTime, Instant.now());
+        int totalSessionWordsTyped = STATISTICS.countWords(inputText) + PLAYER_DATA.getSessionWordsTyped();
+        int totalSessionAccuracy   = calculateSessionAccuracy();
+        int totalSessionWPM        = calculateSessionWPM();
 
         sessionWordsTyped.setText(Integer.toString(totalSessionWordsTyped));
         sessionAccuracy.setText(totalSessionAccuracy + "%");

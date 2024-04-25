@@ -2,6 +2,7 @@ package com.cate.typingthedictionary.Controllers;
 
 import com.cate.typingthedictionary.Main;
 import com.cate.typingthedictionary.PlayerData;
+import com.cate.typingthedictionary.Statistics;
 import com.cate.typingthedictionary.io.PlayerDataReader;
 import com.cate.typingthedictionary.io.PlayerDataWriter;
 import javafx.event.ActionEvent;
@@ -24,6 +25,7 @@ import static com.cate.typingthedictionary.constants.Constants.*;
 public class SummaryController implements Initializable {
 
     private final PlayerData PLAYER_DATA = PlayerData.getInstance();
+    private final Statistics STATISTICS = new Statistics();
 
     @FXML
     private Text totalTypedWords;
@@ -126,8 +128,12 @@ public class SummaryController implements Initializable {
      */
     private void setGlobalStatisticsDisplay() {
 
+        int acc = STATISTICS.calculateAccuracy(PLAYER_DATA.getGlobalErrors(), PLAYER_DATA.getGlobalWordsTyped());
+        int wpm = STATISTICS.calculateWPM(PLAYER_DATA.getGlobalKeystrokes(), PLAYER_DATA.getGlobalElapsedSeconds(),
+                acc);
+
         totalTypedWords.setText(Integer.toString(PLAYER_DATA.getGlobalWordsTyped()));
-        accuracy.setText(PLAYER_DATA.getGlobalAccuracy() + "%");
-        avgWPM.setText(Integer.toString(PLAYER_DATA.getGlobalWPM()));
+        accuracy.setText(acc + "%");
+        avgWPM.setText(Integer.toString(wpm));
     }
 }
