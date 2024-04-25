@@ -16,6 +16,9 @@ public class Validator {
      * @return true if input matches entire entry text
      */
     public boolean compareInputAndEntry(String input, AbstractMap.SimpleEntry<String, List<String>> entry) {
+
+        if (entry == null) return false;
+
         return input.equals(entryToString(entry));
     }
 
@@ -27,7 +30,7 @@ public class Validator {
      * @param text  the input text
      * @return true if the entry starts with the current input
      */
-    public boolean entryStartsWithText(AbstractMap.SimpleEntry<String, List<String>> entry, String text) {
+    public boolean entryStartsWithText(String text, AbstractMap.SimpleEntry<String, List<String>> entry) {
 
         String entryString = entryToString(entry);
 
