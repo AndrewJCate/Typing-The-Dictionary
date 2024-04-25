@@ -20,16 +20,19 @@ public class Dictionary {
      * @param dictionary the dictionary
      */
     public Dictionary(Map<String, List<String>> dictionary) {
-        this.DICTIONARY = dictionary;
+        DICTIONARY = dictionary;
     }
 
     /**
      * Instantiates a new Dictionary.
      */
     public Dictionary() {
-        this.DICTIONARY = new HashMap<>();
+        DICTIONARY = new HashMap<>();
     }
 
+    public Map<String, List<String>> getDictionary() {
+        return DICTIONARY;
+    }
 
     /**
      * Add an entry (word and definitions) to the dictionary.
@@ -44,12 +47,12 @@ public class Dictionary {
 
         if (!word.trim().isEmpty() && definitions.size() > 0) {
 
-            if (this.DICTIONARY.containsKey(word)) {
+            if (DICTIONARY.containsKey(word)) {
                 throw new WordAlreadyExistsException("Word already exists. If replacing a word, remove the old word " +
                         "first with Dictionary.remove(String word).");
             }
 
-            this.DICTIONARY.put(word, definitions);
+            DICTIONARY.put(word, definitions);
 
             return true;
         }
@@ -64,15 +67,17 @@ public class Dictionary {
      */
     public AbstractMap.SimpleEntry<String, List<String>> getRandomEntry() {
 
-        if (this.wordList == null || this.wordList.isEmpty()) {
-            this.createWordList();
+        if (wordList == null || wordList.isEmpty()) {
+            createWordList();
         }
 
-        int randomIndex = new Random().nextInt(this.wordList.size());
+        if (wordList.isEmpty()) return null;
 
-        String word = this.wordList.get(randomIndex);
+        int randomIndex = new Random().nextInt(wordList.size());
 
-        return new AbstractMap.SimpleEntry<>(word, this.DICTIONARY.get(word));
+        String word = wordList.get(randomIndex);
+
+        return new AbstractMap.SimpleEntry<>(word, DICTIONARY.get(word));
     }
 
     /**
@@ -82,9 +87,9 @@ public class Dictionary {
      */
     public AbstractMap.SimpleEntry<String, List<String>> removeEntry(String word) {
 
-        if (!word.trim().isEmpty()) {
+        if (!word.trim().isEmpty() && !DICTIONARY.isEmpty()) {
 
-            List<String> definitions = this.DICTIONARY.remove(word);
+            List<String> definitions = DICTIONARY.remove(word);
 
             return new AbstractMap.SimpleEntry<>(word, definitions);
         }
@@ -94,7 +99,7 @@ public class Dictionary {
 
 
     private void createWordList() {
-        this.wordList = new ArrayList<>(this.DICTIONARY.keySet());
+        wordList = new ArrayList<>(DICTIONARY.keySet());
     }
 
 }
