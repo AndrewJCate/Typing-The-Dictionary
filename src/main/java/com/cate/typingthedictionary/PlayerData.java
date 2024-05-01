@@ -114,14 +114,6 @@ public class PlayerData {
         this.globalWordsTyped = globalWordsTyped;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     public long getSessionElapsedSeconds() {
         return sessionElapsedSeconds;
     }
@@ -146,12 +138,28 @@ public class PlayerData {
         entryErrors++;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
 
     /**
      * Resets entry error count.
      */
     public void resetEntryData() {
         entryErrors = 0;
+    }
+
+    public void resetSessionData() {
+
+        sessionElapsedSeconds = 0;
+        sessionErrors     = 0;
+        sessionKeystrokes = 0;
+        sessionWordsTyped = 0;
     }
 
     /**

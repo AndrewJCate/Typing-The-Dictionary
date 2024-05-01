@@ -106,8 +106,6 @@ public class GameController implements Initializable {
     private Validator  validator;
 
 
-    /* Public methods */
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -116,6 +114,9 @@ public class GameController implements Initializable {
         validator = new Validator();
 
         textInput.setFont(TEXT_INPUT_FONT);
+
+        PLAYER_DATA.resetSessionData();
+        PLAYER_DATA.resetEntryData();
 
         nextWord();
     }
