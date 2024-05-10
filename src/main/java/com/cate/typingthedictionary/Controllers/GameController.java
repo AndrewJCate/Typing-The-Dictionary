@@ -461,7 +461,7 @@ public class GameController implements Initializable {
      * Loads the dictionary to use for entries.
      */
     private void loadDictionary() {
-        dictionary = DictionaryLoader.loadDictionaryFromFile(DEFAULT_DICTIONARY_FILENAME);
+        dictionary = DictionaryLoader.loadDictionaryFromFile(DEFAULT_DICTIONARY_FILE);
     }
 
     /**
@@ -523,7 +523,7 @@ public class GameController implements Initializable {
 
         PLAYER_DATA.saveAllData(textInput.getText(), startTime, Instant.now());
 
-        new PlayerDataWriter().writeData(USER_DATA_FILE);
+        new PlayerDataWriter().writeData(FULL_FILE_PATH);
     }
 
     /**

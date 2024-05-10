@@ -9,8 +9,9 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 
+import static com.cate.typingthedictionary.constants.Constants.FULL_FILE_PATH;
 import static com.cate.typingthedictionary.constants.Constants.SUMMARY_VIEW;
-import static com.cate.typingthedictionary.constants.Constants.USER_DATA_FILE;
+
 
 /**
  * New User controller gets a user input username and stores it in the {@link PlayerData} instance. The username is
@@ -40,7 +41,7 @@ public class NewUserController {
         PLAYER_DATA.setUserName(username);
 
         PlayerDataWriter dataWriter = new PlayerDataWriter();
-        dataWriter.writeData(USER_DATA_FILE);
+        dataWriter.writeData(FULL_FILE_PATH);
 
         Main main = new Main();
 

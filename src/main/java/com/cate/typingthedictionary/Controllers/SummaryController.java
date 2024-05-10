@@ -49,7 +49,9 @@ public class SummaryController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        new PlayerDataReader().readData(USER_DATA_FILE);
+        createWorkingDirectory();
+
+        new PlayerDataReader().readData(FULL_FILE_PATH);
 
         String userName = PLAYER_DATA.getUserName();
 
@@ -74,7 +76,7 @@ public class SummaryController implements Initializable {
 
         Main main = new Main();
 
-        File file = new File(USER_DATA_FILE);
+        File file = new File(FULL_FILE_PATH);
 
         if (file.length() == 0) {
 
@@ -116,10 +118,19 @@ public class SummaryController implements Initializable {
         PLAYER_DATA.setGlobalWordsTyped(0);
 
         // Save new values to file
-        new PlayerDataWriter().writeData(USER_DATA_FILE);
+        new PlayerDataWriter().writeData(FULL_FILE_PATH);
 
         // Set display values
         setGlobalStatisticsDisplay();
+    }
+
+    private void createWorkingDirectory() {
+
+        File gameDirectory = new File(DATA_FILE_PATH);
+
+        if (!gameDirectory.exists()) {
+            gameDirectory.mkdirs();
+        }
     }
 
 

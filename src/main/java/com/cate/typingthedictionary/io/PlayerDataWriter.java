@@ -41,7 +41,7 @@ public class PlayerDataWriter {
         }
         catch (IOException e) {
 
-            System.out.println("File " + Constants.USER_DATA_FILE + " could not be created or modified.");
+            System.out.println("File " + Constants.FULL_FILE_PATH + " could not be created or modified.");
 
             e.printStackTrace();
         }
