@@ -49,7 +49,7 @@ public class SummaryController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        createWorkingDirectory();
+        createSaveDirectory();
 
         new PlayerDataReader().readData(FULL_FILE_PATH);
 
@@ -124,7 +124,11 @@ public class SummaryController implements Initializable {
         setGlobalStatisticsDisplay();
     }
 
-    private void createWorkingDirectory() {
+
+    /**
+     * Creates a directory for the save file in the user's home directory.
+     */
+    private void createSaveDirectory() {
 
         File gameDirectory = new File(DATA_FILE_PATH);
 

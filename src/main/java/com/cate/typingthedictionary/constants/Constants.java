@@ -8,9 +8,9 @@ public class Constants {
 
     public static final String DATA_FILE_PATH = System.getProperty("user.home") + File.separator +
             ".typingthedicitonary";
+    public static final String DEFAULT_DICTIONARY_FILE = "/dictionaries" +
+            "/default_dictionary" + ".json";
     public static final String FULL_FILE_PATH = DATA_FILE_PATH + File.separator + "user_data.txt";
-
-    public static final String DEFAULT_DICTIONARY_FILE = "dictionaries/default_dictionary.json";
     public static final String ICON_FILE = "/images/icon.png";
     public static final String STYLES_FILE = "css/styles.css";
 
