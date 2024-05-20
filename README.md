@@ -1,14 +1,24 @@
 <a name="readme-top"></a>
 
 
-<!-- PROJECT TITLE -->
+<!-- PROJECT LOGO -->
 <br />
 <div align="center">
+  <a href="/src/main/resources/images/icon.png">
+    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  </a>
 
 <h3 align="center">Typing the Dictionary</h3>
 
   <p align="center">
     A game that measures typing speed and accuracy while you type random dictionary entries.
+    <br />
+    <a href="https://github.com/AndrewJCate/Typing-The-Dictionary"><strong>Check it out »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/AndrewJCate/Typing-The-Dictionary/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    ·
+    <a href="https://github.com/AndrewJCate/Typing-The-Dictionary/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 
