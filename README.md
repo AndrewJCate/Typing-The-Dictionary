@@ -4,8 +4,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="/src/main/resources/images/icon.png">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/AndrewJCate/Typing-The-Dictionary">
+    <img src="src/main/resources/images/icon.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Typing the Dictionary</h3>
